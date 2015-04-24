@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -69,12 +70,12 @@ namespace WorkflowApp
 
             buttonOpenFilters.Click += (sender, args) => OpenFilters();
 
-            buttonCalculate.Click += async (sender, args) => CalculateRunExport();
+            buttonCalculate.Click += (sender, args) => CalculateRunExport();
         }
 
         private async void CalculateRunExport()
         {
-            using (var api = new ActiLifeAPILibrary.ActiLifeAPIConnection())
+            using (var api = new ActiLifeAPIConnection())
             {
                 try
                 {
@@ -82,16 +83,25 @@ namespace WorkflowApp
                 }
                 catch (Exceptions.APIConnectionException ex)
                 {
-                    MessageBox.Show(this, "Unable to connect to ActiLife via the API.", "Can't connect to ActiLife!",
+                    MessageBox.Show(this, ex.Message, "Can't connect to ActiLife!",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 
-                //calculate WTV
-                foreach (var file in _workFlowWorker.Files)
+                /*
                 {
-                    
+                    "Action": "APIVersion"
                 }
+                 * */
+
+                var apiVersion = await api.APIVersion();
+                Console.WriteLine(apiVersion);
+
+                //calculate WTV
+                //foreach (var file in _workFlowWorker.Files)
+                //{
+                    
+                //}
 
                 //loop through filter exports
                     //calculate data scoring and export
