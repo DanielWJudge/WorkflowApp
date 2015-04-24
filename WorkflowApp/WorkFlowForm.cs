@@ -9,60 +9,29 @@ namespace WorkflowApp
     public partial class WorkFlowForm : Form
     {
         private readonly WorkFlowWorker _workFlowWorker;
+        private FilterExport _lastFilter;
 
         public WorkFlowForm()
         {
             InitializeComponent();
+            _lastFilter = null;
+            _workFlowWorker = new WorkFlowWorker();
 
             HandleCreated += (o, e) =>
             {
-                wizardPages1.SetTabBackColorForOS();
                 comboBoxWtvAlgorith.SelectedIndex = 0;
                 comboBoxExportType.SelectedIndex = 0;
-            };
+                foreach (var filterExport in _workFlowWorker.FilterExports)
+                    listBoxFilterExports.Items.Add(filterExport);
 
-            buttonNext.Click += (sender, args) =>
-            {
-                switch (wizardPages1.SelectedIndex)
-                {
-                    case 0:
-                        if (_workFlowWorker.FilesCount > 0)
-                            wizardPages1.SelectedIndex = wizardPages1.SelectedIndex + 1;
-                        else
-                            MessageBox.Show(this, "Please add some AGD files to calculate.", "No Files Added",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        break;
-
-                    case 1:
-                        wizardPages1.SelectedIndex = wizardPages1.SelectedIndex + 1;
-                        break;
-
-                    case 2:
-                        if (_workFlowWorker.FiltersCount > 0)
-                            wizardPages1.SelectedIndex = wizardPages1.SelectedIndex + 1;
-                        else
-                            MessageBox.Show(this, "Please add some global date/time filters files to calculate.", "No Filters Added",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        break;
-
-                    case 3:
-                        //run stuff
-                        break;
-                }
-            };
-
-            buttonBack.Click += (sender, args) => wizardPages1.SelectedIndex = wizardPages1.SelectedIndex - 1;
-
-            wizardPages1.SelectedIndexChanged += (sender, args) =>
-            {
-                buttonBack.Enabled = (wizardPages1.SelectedIndex != 0);
-                buttonNext.Text = wizardPages1.SelectedIndex == wizardPages1.TabCount - 1 ? "Finish" : "Next >";
+                listBoxFilterExports.SelectedIndex = 0;
             };
 
             buttonAddFiles.Click += (sender, args) => AddFilesMenuClick();
             buttonClear.Click += (sender, args) =>
             {
-                var result = MessageBox.Show(this, "Are you sure you want to clear all files? This cannot be undone.",
+                DialogResult result = MessageBox.Show(this,
+                    "Are you sure you want to clear all files? This cannot be undone.",
                     "Remove All Files", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
@@ -73,13 +42,14 @@ namespace WorkflowApp
             };
             buttonClearFilters.Click += (sender, args) =>
             {
-                var result = MessageBox.Show(this, "Are you sure you want to clear all filters? This cannot be undone.",
+                DialogResult result = MessageBox.Show(this,
+                    "Are you sure you want to clear all filters? This cannot be undone.",
                     "Remove All Filters", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
                 {
                     _workFlowWorker.ClearFilters();
-                    listBoxFilters.Items.Clear();
+                    checkedListBoxFilters.Items.Clear();
                 }
             };
 
@@ -92,9 +62,39 @@ namespace WorkflowApp
                     textBoxDirectory.Text = currentDirectory;
             };
 
-            buttonOpenFilters.Click += (sender, args) => OpenFilters();
+            listBoxFilterExports.SelectedIndexChanged += (sender, args) => SaveFiltersAndUpdateUI();
 
-            _workFlowWorker = new WorkFlowWorker();
+            buttonOpenFilters.Click += (sender, args) => OpenFilters();
+        }
+
+        private void SaveFiltersAndUpdateUI()
+        {
+            if (_lastFilter == null)
+            {
+                checkedListBoxFilters.ClearSelected();
+                _lastFilter = (FilterExport)listBoxFilterExports.SelectedItem;
+                return;
+            }
+
+            var selectedItems = checkedListBoxFilters.CheckedItems;
+            foreach (var scoringFilter in _lastFilter.ScoringFilters)
+                scoringFilter.Use = false;
+
+            foreach (ScoringFilter selectedItem in selectedItems)
+                _lastFilter.SetUseForFilter(selectedItem);
+
+            _lastFilter = (FilterExport) listBoxFilterExports.SelectedItem;
+
+            for (int i = 0; i < checkedListBoxFilters.Items.Count; i++)
+                checkedListBoxFilters.SetItemChecked(i, false);
+
+            IEnumerable<ScoringFilter> scoringFilters = _lastFilter.ScoringFilters.Where(x => x.Use);
+            if (!scoringFilters.Any())
+                return;
+
+            for (int i = 0; i < checkedListBoxFilters.Items.Count; i++)
+                if (scoringFilters.Contains(checkedListBoxFilters.Items[i]))
+                    checkedListBoxFilters.SetItemChecked(i, true);
         }
 
         private void OpenFilters()
@@ -109,7 +109,7 @@ namespace WorkflowApp
                 {
                     string filename = openFile.FileName;
                     string json;
-                    using (StreamReader re = new StreamReader(filename))
+                    using (var re = new StreamReader(filename))
                         json = re.ReadToEnd();
 
                     if (json.Length > 0)
@@ -117,12 +117,18 @@ namespace WorkflowApp
                         try
                         {
                             var scoringFilters = JsonConvert.DeserializeObject<List<ScoringFilter>>(json);
+                            foreach (var scoringFilter in scoringFilters)
+                                scoringFilter.Use = false;
+
                             _workFlowWorker.AddFilters(scoringFilters);
 
-                            listBoxFilters.Items.Clear();
-                            listBoxFilters.Items.AddRange(_workFlowWorker.Filters.ToArray());
+                            checkedListBoxFilters.Items.Clear();
+                            foreach (var filter in _workFlowWorker.Filters)
+                                checkedListBoxFilters.Items.Add(filter);
                         }
-                        catch { }
+                        catch
+                        {
+                        }
                     }
                 }
             }
@@ -148,10 +154,11 @@ namespace WorkflowApp
             string currentDirectory = Helpers.SelectFolder();
             if (!string.IsNullOrEmpty(currentDirectory))
             {
-                var files = Helpers.GetFilesRecursive(currentDirectory, "*.agd");
+                List<string> files = Helpers.GetFilesRecursive(currentDirectory, "*.agd");
                 if (!files.Any())
                 {
-                    MessageBox.Show(this, "The selected directory does not contain any files.", "No files found!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(this, "The selected directory does not contain any files.", "No files found!",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     AddDirectoryMenuClick();
                     return;
                 }
@@ -163,59 +170,8 @@ namespace WorkflowApp
         {
             _workFlowWorker.AddFiles(files);
             listBoxFiles.Items.Clear();
-            listBoxFiles.Items.AddRange(_workFlowWorker.Files.ToArray());
-        }
-    }
-
-    public class WorkFlowWorker
-    {
-        private readonly List<string> _files;
-        private readonly List<ScoringFilter> _filters; 
-
-        public int FilesCount
-        {
-            get { return _files.Count; }
-        }
-
-        public IEnumerable<string> Files
-        {
-            get { return _files; }
-        }
-
-        public void AddFiles(IEnumerable<string> fileNames)
-        {
-            _files.AddRange(fileNames.Where(fileName => !_files.Contains(fileName)));
-        }
-
-        public void ClearFiles()
-        {
-            _files.Clear();
-        }
-
-        public int FiltersCount
-        {
-            get { return _filters.Count; }
-        }
-
-        public IEnumerable<ScoringFilter> Filters
-        {
-            get { return _filters; }
-        }
-
-        public void AddFilters(IEnumerable<ScoringFilter> filters)
-        {
-            _filters.AddRange(filters.Where(filter => !_filters.Contains(filter)));
-        }
-
-        public void ClearFilters()
-        {
-            _filters.Clear();
-        }
-
-        public WorkFlowWorker()
-        {
-            _files = new List<string>(100);
-            _filters = new List<ScoringFilter>(50);
+            foreach (var file in _workFlowWorker.Files)
+                listBoxFiles.Items.Add(file);
         }
     }
 }

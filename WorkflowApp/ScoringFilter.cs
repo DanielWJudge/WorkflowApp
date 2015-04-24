@@ -25,7 +25,7 @@ namespace WorkflowApp
 
         public ScoringFilter()
         {
-            Use = true;
+            Use = false;
         }
 
         public ScoringFilter(ScoringFilter sf)
@@ -55,7 +55,9 @@ namespace WorkflowApp
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other.Type, Type) && Equals(other.Name, Name) && other.Use.Equals(Use) && other.StartTime.Equals(StartTime) && other.StopTime.Equals(StopTime) && other.DayOfTheWeek == DayOfTheWeek && other.SpecificDate.Equals(SpecificDate);
+            return Equals(other.Type, Type) && Equals(other.Name, Name) && other.StartTime.Equals(StartTime) &&
+                   other.StopTime.Equals(StopTime) && other.DayOfTheWeek == DayOfTheWeek &&
+                   other.SpecificDate.Equals(SpecificDate);
         }
 
         public override int GetHashCode()
@@ -64,7 +66,6 @@ namespace WorkflowApp
             {
                 int result = Type.GetHashCode();
                 result = (result * 397) ^ (Name != null ? Name.GetHashCode() : 0);
-                result = (result * 397) ^ Use.GetHashCode();
                 result = (result * 397) ^ StartTime.TimeOfDay.GetHashCode();
                 result = (result * 397) ^ StopTime.TimeOfDay.GetHashCode();
                 result = (result * 397) ^ DayOfTheWeek;

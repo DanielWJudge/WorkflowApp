@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FilterExport.cs" />
     <Compile Include="FormExtensions.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="ScoringFilter.cs" />
@@ -64,6 +65,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorkFlowWorker.cs" />
     <EmbeddedResource Include="WorkFlowForm.resx">
       <DependentUpon>WorkFlowForm.cs</DependentUpon>
     </EmbeddedResource>
