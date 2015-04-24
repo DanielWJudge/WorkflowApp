@@ -69,16 +69,16 @@ namespace WorkflowApp
 
             buttonOpenFilters.Click += (sender, args) => OpenFilters();
 
-            buttonCalculate.Click += (sender, args) => CalculateRunExport();
+            buttonCalculate.Click += async (sender, args) => CalculateRunExport();
         }
 
-        private void CalculateRunExport()
+        private async void CalculateRunExport()
         {
             using (var api = new ActiLifeAPILibrary.ActiLifeAPIConnection())
             {
                 try
                 {
-                    api.Connect();
+                    await api.Connect(5000);
                 }
                 catch (Exceptions.APIConnectionException ex)
                 {
