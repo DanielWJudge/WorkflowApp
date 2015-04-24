@@ -1,0 +1,3 @@
+[submodule "ActiLifeAPIDemoCSharp"]
+	path = ActiLifeAPIDemoCSharp
+	url = https://github.com/actigraph/ActiLifeAPIDemoCSharp
