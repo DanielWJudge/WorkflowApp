@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using ActiLifeAPILibrary;
 using Newtonsoft.Json;
 
 namespace WorkflowApp
@@ -16,6 +17,8 @@ namespace WorkflowApp
             InitializeComponent();
             _lastFilter = null;
             _workFlowWorker = new WorkFlowWorker();
+
+            
 
             HandleCreated += (o, e) =>
             {
@@ -65,6 +68,36 @@ namespace WorkflowApp
             listBoxFilterExports.SelectedIndexChanged += (sender, args) => SaveFiltersAndUpdateUI();
 
             buttonOpenFilters.Click += (sender, args) => OpenFilters();
+
+            buttonCalculate.Click += (sender, args) => CalculateRunExport();
+        }
+
+        private void CalculateRunExport()
+        {
+            using (var api = new ActiLifeAPILibrary.ActiLifeAPIConnection())
+            {
+                try
+                {
+                    api.Connect();
+                }
+                catch (Exceptions.APIConnectionException ex)
+                {
+                    MessageBox.Show(this, "Unable to connect to ActiLife via the API.", "Can't connect to ActiLife!",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                
+                //calculate WTV
+                foreach (var file in _workFlowWorker.Files)
+                {
+                    
+                }
+
+                //loop through filter exports
+                    //calculate data scoring and export
+
+                //FINISH!
+            }
         }
 
         private void SaveFiltersAndUpdateUI()

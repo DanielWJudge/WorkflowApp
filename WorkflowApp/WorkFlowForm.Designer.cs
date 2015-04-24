@@ -46,14 +46,14 @@
             this.textBoxDirectory = new System.Windows.Forms.TextBox();
             this.buttonSelectFolder = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonAddFiles = new WorkflowApp.SplitButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.listBoxFilterExports = new System.Windows.Forms.ListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.buttonAddFiles = new WorkflowApp.SplitButton();
+            this.buttonCalculate = new System.Windows.Forms.Button();
             this.contextMenuStripAddDataScoring.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -235,6 +235,19 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Files to Calculate";
             // 
+            // buttonAddFiles
+            // 
+            this.buttonAddFiles.AutoSize = true;
+            this.buttonAddFiles.ContextMenuStrip = this.contextMenuStripAddDataScoring;
+            this.buttonAddFiles.Location = new System.Drawing.Point(26, 24);
+            this.buttonAddFiles.Name = "buttonAddFiles";
+            this.buttonAddFiles.Size = new System.Drawing.Size(147, 27);
+            this.buttonAddFiles.SplitMenuStrip = this.contextMenuStripAddDataScoring;
+            this.buttonAddFiles.TabIndex = 4;
+            this.buttonAddFiles.Text = "Add AGD File(s)...";
+            this.buttonAddFiles.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.buttonAddFiles.UseVisualStyleBackColor = true;
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.numericUpDown1);
@@ -309,36 +322,23 @@
             this.panel1.Size = new System.Drawing.Size(906, 56);
             this.panel1.TabIndex = 6;
             // 
-            // button1
+            // buttonCalculate
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.AutoSize = true;
-            this.button1.Location = new System.Drawing.Point(799, 753);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(117, 27);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "Calculate Everything!";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // buttonAddFiles
-            // 
-            this.buttonAddFiles.AutoSize = true;
-            this.buttonAddFiles.ContextMenuStrip = this.contextMenuStripAddDataScoring;
-            this.buttonAddFiles.Location = new System.Drawing.Point(26, 24);
-            this.buttonAddFiles.Name = "buttonAddFiles";
-            this.buttonAddFiles.Size = new System.Drawing.Size(147, 27);
-            this.buttonAddFiles.SplitMenuStrip = this.contextMenuStripAddDataScoring;
-            this.buttonAddFiles.TabIndex = 4;
-            this.buttonAddFiles.Text = "Add AGD File(s)...";
-            this.buttonAddFiles.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.buttonAddFiles.UseVisualStyleBackColor = true;
+            this.buttonCalculate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCalculate.AutoSize = true;
+            this.buttonCalculate.Location = new System.Drawing.Point(799, 753);
+            this.buttonCalculate.Name = "buttonCalculate";
+            this.buttonCalculate.Size = new System.Drawing.Size(117, 27);
+            this.buttonCalculate.TabIndex = 7;
+            this.buttonCalculate.Text = "Calculate Everything!";
+            this.buttonCalculate.UseVisualStyleBackColor = true;
             // 
             // WorkFlowForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(926, 804);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonCalculate);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.panel1);
@@ -387,7 +387,7 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonCalculate;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListBox listBoxFilterExports;
 
