@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using ActiLifeAPILibrary;
+using ActiLifeAPILibrary.Models.Actions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using DataScoringExport = ActiLifeAPILibrary.Models.Request.DataScoringExport;
+using WearTimeValidation = ActiLifeAPILibrary.Models.Request.WearTimeValidation;
 
 namespace WorkflowApp
 {
@@ -60,21 +64,75 @@ namespace WorkflowApp
                         richTextBox1.AppendText(string.Format("ActiLife API version: {0}", apiVersion));
                 }
 
+                var files = _workFlowWorker.Files.ToArray();
                 
-                
-
                 //calculate WTV
-                foreach (var file in _workFlowWorker.Files)
+                foreach (var file in files)
                 {
                     richTextBox1.AppendText("Calculating Wear Time Validation for: " + file + "\r\n");
-                }
 
+                    var wtv = new WearTimeValidation
+                    {
+                        Options =
+                        {
+                            Algorithm = _workFlowWorker.WearTimeValidationAlgorithm, 
+                            FileInputPath = file
+                        }
+                    };
+                    await api.WearTimeValidation(wtv);
+                }
+                
                 //loop through filter exports
                 foreach (var filterExport in _workFlowWorker.FilterExports)
                 {
                     richTextBox1.AppendText("Calculating an exporting: " + filterExport.Name + "\r\n");
                     //calculate data scoring and export
 
+                    var dataScoringExport = new DataScoringExport
+                    {
+                        Options =
+                        {
+                            FileInputPaths = files,
+                            ExportLocation = _workFlowWorker.DirectoryToSaveResults,
+                            ExportFileType = _workFlowWorker.ExportType,
+                            CalculateEnergyExpenditure = false,
+                            CalculateMETs = false,
+                            BatchExportSheetOptions = new BatchExportSheetOptions
+                            {
+                                AddDefinitionComments = false,
+                                AddDefinitionWorksheet = false,
+                                AddWtv = true,
+                                ShowNonWear = false,
+                                ShowSummary = true,
+                                ShowDaily = false,
+                                ShowHourly = false,
+                                AddSleepScores = false,
+                                ShowBoutDetails = false,
+                                ShowSedentaryDetails = false,
+                            },
+                            CalculateCutPoints = true,
+                            CutPointOptions = new CutPointOptions
+                            {
+                                Algorithm = "EvensonChildren2008"
+                            },
+                            CalculateBouts = false,
+                            CalculateSedentaryAnalysis = false,
+                            IncludeExtraStatistics = true,
+                            FilterOptions = new FilterOptions
+                            {
+                                UseLogDiaries = false,
+                                UseWTVData = true,
+                                GlobalDateTimeFilterOptions = new GlobalDateTimeFilterOptions
+                                {
+                                    UseGlobalDateTimeFilters = true,
+                                    GlobalDateTimeFilters = filterExport.ScoringFilters.Where(x => x.Use).ToList()
+                                }
+                            }
+
+                        }
+                    };
+
+                    await api.DataScoringExport(dataScoringExport);
                 }
                 
 

@@ -70,7 +70,6 @@
     <Compile Include="FilterExport.cs" />
     <Compile Include="FormExtensions.cs" />
     <Compile Include="Helpers.cs" />
-    <Compile Include="ScoringFilter.cs" />
     <Compile Include="SplitButton.cs">
       <SubType>Component</SubType>
     </Compile>

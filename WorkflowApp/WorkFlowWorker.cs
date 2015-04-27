@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using ActiLifeAPILibrary.Models.Actions;
 
 namespace WorkflowApp
 {
@@ -20,7 +21,7 @@ namespace WorkflowApp
         public List<FilterExport> FilterExports;
 
         public string DirectoryToSaveResults { get; set; }
-        public string ExportType { get; set; }
+        public DataScoringExport.ExportType ExportType { get; set; }
         public string WearTimeValidationAlgorithm { get; set; }
         public decimal WearTimeValidationMinimumPerDay { get; set; }
 

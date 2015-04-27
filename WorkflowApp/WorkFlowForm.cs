@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ActiLifeAPILibrary.Models.Actions;
 using Newtonsoft.Json;
 
 namespace WorkflowApp
@@ -22,6 +23,8 @@ namespace WorkflowApp
 
             HandleCreated += (o, e) =>
             {
+                comboBoxExportType.Items.Add(DataScoringExport.ExportType.Csv);
+                comboBoxExportType.Items.Add(DataScoringExport.ExportType.Excel);
                 comboBoxWtvAlgorithm.SelectedIndex = 0;
                 comboBoxExportType.SelectedIndex = 0;
                 foreach (var filterExport in _workFlowWorker.FilterExports)
@@ -70,7 +73,7 @@ namespace WorkflowApp
             saveWorkspaceToolStripMenuItem.Click += (sender, args) =>
             {
                 _workFlowWorker.DirectoryToSaveResults = textBoxDirectory.Text;
-                _workFlowWorker.ExportType = comboBoxExportType.Text;
+                _workFlowWorker.ExportType = (DataScoringExport.ExportType) comboBoxExportType.SelectedItem;
                 _workFlowWorker.WearTimeValidationAlgorithm = comboBoxWtvAlgorithm.Text;
                 _workFlowWorker.WearTimeValidationMinimumPerDay = numericUpDown1.Value;
 
@@ -164,7 +167,7 @@ namespace WorkflowApp
                 checkedListBoxFilters.Items.Add(filter);
 
             textBoxDirectory.Text = newWorkFlowWorker.DirectoryToSaveResults;
-            comboBoxExportType.Text = newWorkFlowWorker.ExportType;
+            comboBoxExportType.SelectedItem = newWorkFlowWorker.ExportType;
             comboBoxWtvAlgorithm.Text = newWorkFlowWorker.WearTimeValidationAlgorithm;
             numericUpDown1.Value = newWorkFlowWorker.WearTimeValidationMinimumPerDay;
 
@@ -227,7 +230,7 @@ namespace WorkflowApp
             }
 
             _workFlowWorker.DirectoryToSaveResults = textBoxDirectory.Text;
-            _workFlowWorker.ExportType = comboBoxExportType.Text;
+            _workFlowWorker.ExportType = (DataScoringExport.ExportType) comboBoxExportType.SelectedItem;
             _workFlowWorker.WearTimeValidationAlgorithm = comboBoxWtvAlgorithm.Text;
             _workFlowWorker.WearTimeValidationMinimumPerDay = numericUpDown1.Value;
 

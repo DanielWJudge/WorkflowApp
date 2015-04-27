@@ -191,9 +191,6 @@
             // 
             this.comboBoxExportType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxExportType.FormattingEnabled = true;
-            this.comboBoxExportType.Items.AddRange(new object[] {
-            "CSV",
-            "Excel"});
             this.comboBoxExportType.Location = new System.Drawing.Point(210, 64);
             this.comboBoxExportType.Name = "comboBoxExportType";
             this.comboBoxExportType.Size = new System.Drawing.Size(121, 25);
