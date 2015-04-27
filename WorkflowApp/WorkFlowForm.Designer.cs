@@ -36,7 +36,7 @@
             this.listBoxFiles = new System.Windows.Forms.ListBox();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
-            this.comboBoxWtvAlgorith = new System.Windows.Forms.ComboBox();
+            this.comboBoxWtvAlgorithm = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.checkedListBoxFilters = new System.Windows.Forms.CheckedListBox();
             this.buttonClearFilters = new System.Windows.Forms.Button();
@@ -46,7 +46,6 @@
             this.textBoxDirectory = new System.Windows.Forms.TextBox();
             this.buttonSelectFolder = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.buttonAddFiles = new WorkflowApp.SplitButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -54,12 +53,17 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonCalculate = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.openWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonAddFiles = new WorkflowApp.SplitButton();
             this.contextMenuStripAddDataScoring.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStripAddDataScoring
@@ -132,15 +136,15 @@
             // 
             // comboBoxWtvAlgorith
             // 
-            this.comboBoxWtvAlgorith.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxWtvAlgorith.FormattingEnabled = true;
-            this.comboBoxWtvAlgorith.Items.AddRange(new object[] {
+            this.comboBoxWtvAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxWtvAlgorithm.FormattingEnabled = true;
+            this.comboBoxWtvAlgorithm.Items.AddRange(new object[] {
             "Troiano",
             "Choi"});
-            this.comboBoxWtvAlgorith.Location = new System.Drawing.Point(228, 28);
-            this.comboBoxWtvAlgorith.Name = "comboBoxWtvAlgorith";
-            this.comboBoxWtvAlgorith.Size = new System.Drawing.Size(121, 25);
-            this.comboBoxWtvAlgorith.TabIndex = 6;
+            this.comboBoxWtvAlgorithm.Location = new System.Drawing.Point(228, 28);
+            this.comboBoxWtvAlgorithm.Name = "comboBoxWtvAlgorithm";
+            this.comboBoxWtvAlgorithm.Size = new System.Drawing.Size(121, 25);
+            this.comboBoxWtvAlgorithm.TabIndex = 6;
             // 
             // label4
             // 
@@ -160,7 +164,7 @@
             this.checkedListBoxFilters.FormattingEnabled = true;
             this.checkedListBoxFilters.Location = new System.Drawing.Point(424, 57);
             this.checkedListBoxFilters.Name = "checkedListBoxFilters";
-            this.checkedListBoxFilters.Size = new System.Drawing.Size(461, 264);
+            this.checkedListBoxFilters.Size = new System.Drawing.Size(461, 204);
             this.checkedListBoxFilters.TabIndex = 10;
             // 
             // buttonClearFilters
@@ -228,35 +232,22 @@
             this.groupBox1.Controls.Add(this.listBoxFiles);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(10, 10);
+            this.groupBox1.Location = new System.Drawing.Point(10, 36);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(906, 212);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Files to Calculate";
             // 
-            // buttonAddFiles
-            // 
-            this.buttonAddFiles.AutoSize = true;
-            this.buttonAddFiles.ContextMenuStrip = this.contextMenuStripAddDataScoring;
-            this.buttonAddFiles.Location = new System.Drawing.Point(26, 24);
-            this.buttonAddFiles.Name = "buttonAddFiles";
-            this.buttonAddFiles.Size = new System.Drawing.Size(147, 27);
-            this.buttonAddFiles.SplitMenuStrip = this.contextMenuStripAddDataScoring;
-            this.buttonAddFiles.TabIndex = 4;
-            this.buttonAddFiles.Text = "Add AGD File(s)...";
-            this.buttonAddFiles.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.buttonAddFiles.UseVisualStyleBackColor = true;
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.numericUpDown1);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.comboBoxWtvAlgorith);
+            this.groupBox2.Controls.Add(this.comboBoxWtvAlgorithm);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(10, 222);
+            this.groupBox2.Location = new System.Drawing.Point(10, 248);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(906, 73);
             this.groupBox2.TabIndex = 3;
@@ -272,9 +263,9 @@
             this.groupBox3.Controls.Add(this.buttonClearFilters);
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox3.Location = new System.Drawing.Point(10, 295);
+            this.groupBox3.Location = new System.Drawing.Point(10, 321);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(906, 339);
+            this.groupBox3.Size = new System.Drawing.Size(906, 313);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Select Filters for Each Export";
@@ -296,7 +287,7 @@
             this.listBoxFilterExports.ItemHeight = 17;
             this.listBoxFilterExports.Location = new System.Drawing.Point(26, 57);
             this.listBoxFilterExports.Name = "listBoxFilterExports";
-            this.listBoxFilterExports.Size = new System.Drawing.Size(373, 259);
+            this.listBoxFilterExports.Size = new System.Drawing.Size(373, 208);
             this.listBoxFilterExports.TabIndex = 11;
             // 
             // groupBox4
@@ -326,12 +317,52 @@
             // 
             this.buttonCalculate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCalculate.AutoSize = true;
-            this.buttonCalculate.Location = new System.Drawing.Point(799, 753);
+            this.buttonCalculate.Location = new System.Drawing.Point(798, 753);
             this.buttonCalculate.Name = "buttonCalculate";
-            this.buttonCalculate.Size = new System.Drawing.Size(117, 27);
+            this.buttonCalculate.Size = new System.Drawing.Size(118, 27);
             this.buttonCalculate.TabIndex = 7;
-            this.buttonCalculate.Text = "Calculate Everything!";
+            this.buttonCalculate.Text = "Calculate and Export!";
             this.buttonCalculate.UseVisualStyleBackColor = true;
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openWorkspaceToolStripMenuItem,
+            this.saveWorkspaceToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(10, 10);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 0, 6);
+            this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.menuStrip1.Size = new System.Drawing.Size(906, 26);
+            this.menuStrip1.TabIndex = 8;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // openWorkspaceToolStripMenuItem
+            // 
+            this.openWorkspaceToolStripMenuItem.Image = global::WorkflowApp.Properties.Resources.document_inspector_16px;
+            this.openWorkspaceToolStripMenuItem.Name = "openWorkspaceToolStripMenuItem";
+            this.openWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(134, 20);
+            this.openWorkspaceToolStripMenuItem.Text = "Open Workspace...";
+            // 
+            // saveWorkspaceToolStripMenuItem
+            // 
+            this.saveWorkspaceToolStripMenuItem.Image = global::WorkflowApp.Properties.Resources.save_as_16px;
+            this.saveWorkspaceToolStripMenuItem.Name = "saveWorkspaceToolStripMenuItem";
+            this.saveWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(129, 20);
+            this.saveWorkspaceToolStripMenuItem.Text = "Save Workspace...";
+            // 
+            // buttonAddFiles
+            // 
+            this.buttonAddFiles.AutoSize = true;
+            this.buttonAddFiles.ContextMenuStrip = this.contextMenuStripAddDataScoring;
+            this.buttonAddFiles.Location = new System.Drawing.Point(26, 24);
+            this.buttonAddFiles.Name = "buttonAddFiles";
+            this.buttonAddFiles.Size = new System.Drawing.Size(147, 27);
+            this.buttonAddFiles.SplitMenuStrip = this.contextMenuStripAddDataScoring;
+            this.buttonAddFiles.TabIndex = 4;
+            this.buttonAddFiles.Text = "Add AGD File(s)...";
+            this.buttonAddFiles.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.buttonAddFiles.UseVisualStyleBackColor = true;
             // 
             // WorkFlowForm
             // 
@@ -344,6 +375,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.menuStrip1);
             this.Name = "WorkFlowForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -358,6 +390,8 @@
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -373,7 +407,7 @@
         private System.Windows.Forms.Button buttonClear;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox comboBoxWtvAlgorith;
+        private System.Windows.Forms.ComboBox comboBoxWtvAlgorithm;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button buttonOpenFilters;
         private System.Windows.Forms.Button buttonClearFilters;
@@ -390,6 +424,9 @@
         private System.Windows.Forms.Button buttonCalculate;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListBox listBoxFilterExports;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem openWorkspaceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveWorkspaceToolStripMenuItem;
 
     }
 }

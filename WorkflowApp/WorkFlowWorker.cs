@@ -5,17 +5,27 @@ namespace WorkflowApp
 {
     public class WorkFlowWorker
     {
-        private readonly List<string> _files;
-        private readonly List<ScoringFilter> _filters;
+        public WorkFlowWorker()
+        {
+            Files = new List<string>(100);
+            Filters = new List<ScoringFilter>(50);
+            FilterExports = new List<FilterExport>(12);
+            DirectoryToSaveResults = "";
+        }
+
+        public List<string> Files { get; set; }
+
+        public List<ScoringFilter> Filters { get; set; }
 
         public List<FilterExport> FilterExports;
 
-        public WorkFlowWorker()
-        {
-            _files = new List<string>(100);
-            _filters = new List<ScoringFilter>(50);
-            FilterExports = new List<FilterExport>(12);
+        public string DirectoryToSaveResults { get; set; }
+        public string ExportType { get; set; }
+        public string WearTimeValidationAlgorithm { get; set; }
+        public decimal WearTimeValidationMinimumPerDay { get; set; }
 
+        public void CreateDefaultFilterExports()
+        {
             FilterExports.Add(new FilterExport("Total weekly PA"));
             FilterExports.Add(new FilterExport("Leisure time (school end bell to start bell on next school day)"));
             FilterExports.Add(new FilterExport("Leisure time (weekdays only)"));
@@ -30,40 +40,20 @@ namespace WorkflowApp
             FilterExports.Add(new FilterExport("Whole days"));
         }
 
-        public int FilesCount
-        {
-            get { return _files.Count; }
-        }
-
-        public IEnumerable<string> Files
-        {
-            get { return _files; }
-        }
-
-        public int FiltersCount
-        {
-            get { return _filters.Count; }
-        }
-
-        public IEnumerable<ScoringFilter> Filters
-        {
-            get { return _filters; }
-        }
-
         public void AddFiles(IEnumerable<string> fileNames)
         {
-            _files.AddRange(fileNames.Where(fileName => !_files.Contains(fileName)));
+            Files.AddRange(fileNames.Where(fileName => !Files.Contains(fileName)));
         }
 
         public void ClearFiles()
         {
-            _files.Clear();
+            Files.Clear();
         }
 
         public void AddFilters(IEnumerable<ScoringFilter> filters)
         {
-            var scoringFilters = filters.Where(filter => !_filters.Contains(filter)).ToList();
-            _filters.AddRange(scoringFilters);
+            List<ScoringFilter> scoringFilters = filters.Where(filter => !Filters.Contains(filter)).ToList();
+            Filters.AddRange(scoringFilters);
 
             foreach (FilterExport filterExport in FilterExports)
                 filterExport.AddFilterRange(scoringFilters);
@@ -71,9 +61,9 @@ namespace WorkflowApp
 
         public void ClearFilters()
         {
-            _filters.Clear();
+            Filters.Clear();
 
-            foreach (var filterExport in FilterExports)
+            foreach (FilterExport filterExport in FilterExports)
                 filterExport.ClearFilters();
         }
     }

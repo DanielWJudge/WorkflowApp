@@ -6,29 +6,24 @@ namespace WorkflowApp
     {
         public string Name { get; set; }
 
-        private readonly List<ScoringFilter> _scoringFilters;
-
-        public IEnumerable<ScoringFilter> ScoringFilters
-        {
-            get { return _scoringFilters; }
-        }
-
+        public List<ScoringFilter> ScoringFilters { get; set; }
+        
         public FilterExport(string name)
         {
             Name = name;
-            _scoringFilters = new List<ScoringFilter>();
+            ScoringFilters = new List<ScoringFilter>();
         }
 
         public void SetUseForFilter(ScoringFilter filter)
         {
-            foreach (var scoringFilter in _scoringFilters)
+            foreach (var scoringFilter in ScoringFilters)
                 if (scoringFilter.Equals(filter))
                     scoringFilter.Use = true;
         }
 
         public void AddFilter(ScoringFilter filter)
         {
-            _scoringFilters.Add(new ScoringFilter(filter));
+            ScoringFilters.Add(new ScoringFilter(filter));
         }
 
         public void AddFilterRange(IEnumerable<ScoringFilter> filters)
@@ -39,7 +34,7 @@ namespace WorkflowApp
 
         public void ClearFilters()
         {
-            _scoringFilters.Clear();
+            ScoringFilters.Clear();
         }
 
         public override string ToString()

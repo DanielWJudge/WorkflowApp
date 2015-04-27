@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ActiLifeAPILibrary;
 using Newtonsoft.Json;
@@ -63,7 +57,7 @@ namespace WorkflowApp
                 {
                     JToken apiVersion;
                     if (((JObject) value).TryGetValue("version", StringComparison.CurrentCultureIgnoreCase, out apiVersion))
-                        richTextBox1.AppendText(string.Format("ActiLife API version: {0}", apiVersion.ToString()));
+                        richTextBox1.AppendText(string.Format("ActiLife API version: {0}", apiVersion));
                 }
 
                 
@@ -86,6 +80,12 @@ namespace WorkflowApp
 
                 //FINISH!
                 richTextBox1.AppendText("Finished!\r\n");
+
+                var foo = JsonConvert.SerializeObject(_workFlowWorker, Formatting.Indented);
+
+                var bar = JsonConvert.DeserializeObject<WorkFlowWorker>(foo);
+
+                Console.WriteLine(bar);
             }
         }
     }
