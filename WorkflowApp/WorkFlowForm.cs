@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
-using ActiLifeAPILibrary;
 using Newtonsoft.Json;
 
 namespace WorkflowApp
@@ -73,41 +72,41 @@ namespace WorkflowApp
             buttonCalculate.Click += (sender, args) => CalculateRunExport();
         }
 
-        private async void CalculateRunExport()
+        private void CalculateRunExport()
         {
-            using (var api = new ActiLifeAPIConnection())
+            //make sure we have files entered
+            if (_workFlowWorker.FilesCount == 0)
             {
-                try
-                {
-                    await api.Connect(5000);
-                }
-                catch (Exceptions.APIConnectionException ex)
-                {
-                    MessageBox.Show(this, ex.Message, "Can't connect to ActiLife!",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                
-                /*
-                {
-                    "Action": "APIVersion"
-                }
-                 * */
-
-                var apiVersion = await api.APIVersion();
-                Console.WriteLine(apiVersion);
-
-                //calculate WTV
-                //foreach (var file in _workFlowWorker.Files)
-                //{
-                    
-                //}
-
-                //loop through filter exports
-                    //calculate data scoring and export
-
-                //FINISH!
+                MessageBox.Show(this, "Please add some AGD files to calculate", "No Files Loaded",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
+
+            StringBuilder sb = new StringBuilder(1024);
+            //make sure we have global date/time filters loaded
+            if (_workFlowWorker.FiltersCount == 0)
+                sb.AppendLine("No global date/time filters were loaded.");
+
+            //make sure each filter export has at least one global date/time filter loaded
+            foreach (var filterExport in _workFlowWorker.FilterExports)
+            {
+                var count = filterExport.ScoringFilters.Count(x => x.Use);
+                if (count == 0)
+                    sb.AppendLine(string.Format("{0} has no selected date/time filters", filterExport.Name));
+            }
+
+            if (sb.Length > 0)
+            {
+                DialogResult result = MessageBox.Show(this,
+                    "Are you sure you want to continue? The following isn't filled out:\r\r\n" + sb,
+                    "Not all areas are filled in", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.No)
+                    return;
+            }
+
+            using (var workflowProgress = new WorkflowProgress(_workFlowWorker))
+                workflowProgress.ShowDialog(this);
         }
 
         private void SaveFiltersAndUpdateUI()
