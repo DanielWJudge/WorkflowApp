@@ -104,6 +104,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="WorkflowProgress.resx">
       <DependentUpon>WorkflowProgress.cs</DependentUpon>
@@ -129,6 +130,12 @@
       <Project>{779e62b3-c5a6-494d-9d87-96c0dec7ffb0}</Project>
       <Name>Ookii.Dialogs</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save_as_16px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\document_inspector_16px.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
