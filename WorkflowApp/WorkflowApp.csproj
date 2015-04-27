@@ -85,6 +85,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorkflowProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WorkflowProgress.Designer.cs">
+      <DependentUpon>WorkflowProgress.cs</DependentUpon>
+    </Compile>
     <Compile Include="WorkFlowWorker.cs" />
     <EmbeddedResource Include="WorkFlowForm.resx">
       <DependentUpon>WorkFlowForm.cs</DependentUpon>
@@ -99,6 +105,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="WorkflowProgress.resx">
+      <DependentUpon>WorkflowProgress.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
