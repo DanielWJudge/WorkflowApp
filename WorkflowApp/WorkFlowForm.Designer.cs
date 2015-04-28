@@ -46,6 +46,7 @@
             this.textBoxDirectory = new System.Windows.Forms.TextBox();
             this.buttonSelectFolder = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonAddFiles = new WorkflowApp.SplitButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -56,7 +57,6 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.openWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.buttonAddFiles = new WorkflowApp.SplitButton();
             this.contextMenuStripAddDataScoring.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -120,7 +120,7 @@
             this.numericUpDown1.Size = new System.Drawing.Size(77, 25);
             this.numericUpDown1.TabIndex = 8;
             this.numericUpDown1.Value = new decimal(new int[] {
-            1000,
+            480,
             0,
             0,
             0});
@@ -134,13 +134,10 @@
             this.label5.TabIndex = 7;
             this.label5.Text = "Minimum Wear Minutes Per Day:";
             // 
-            // comboBoxWtvAlgorith
+            // comboBoxWtvAlgorithm
             // 
             this.comboBoxWtvAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxWtvAlgorithm.FormattingEnabled = true;
-            this.comboBoxWtvAlgorithm.Items.AddRange(new object[] {
-            "Troiano",
-            "Choi"});
             this.comboBoxWtvAlgorithm.Location = new System.Drawing.Point(228, 28);
             this.comboBoxWtvAlgorithm.Name = "comboBoxWtvAlgorithm";
             this.comboBoxWtvAlgorithm.Size = new System.Drawing.Size(121, 25);
@@ -235,6 +232,19 @@
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Files to Calculate";
+            // 
+            // buttonAddFiles
+            // 
+            this.buttonAddFiles.AutoSize = true;
+            this.buttonAddFiles.ContextMenuStrip = this.contextMenuStripAddDataScoring;
+            this.buttonAddFiles.Location = new System.Drawing.Point(26, 24);
+            this.buttonAddFiles.Name = "buttonAddFiles";
+            this.buttonAddFiles.Size = new System.Drawing.Size(147, 27);
+            this.buttonAddFiles.SplitMenuStrip = this.contextMenuStripAddDataScoring;
+            this.buttonAddFiles.TabIndex = 4;
+            this.buttonAddFiles.Text = "Add AGD File(s)...";
+            this.buttonAddFiles.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.buttonAddFiles.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
@@ -347,19 +357,6 @@
             this.saveWorkspaceToolStripMenuItem.Name = "saveWorkspaceToolStripMenuItem";
             this.saveWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(129, 20);
             this.saveWorkspaceToolStripMenuItem.Text = "Save Workspace...";
-            // 
-            // buttonAddFiles
-            // 
-            this.buttonAddFiles.AutoSize = true;
-            this.buttonAddFiles.ContextMenuStrip = this.contextMenuStripAddDataScoring;
-            this.buttonAddFiles.Location = new System.Drawing.Point(26, 24);
-            this.buttonAddFiles.Name = "buttonAddFiles";
-            this.buttonAddFiles.Size = new System.Drawing.Size(147, 27);
-            this.buttonAddFiles.SplitMenuStrip = this.contextMenuStripAddDataScoring;
-            this.buttonAddFiles.TabIndex = 4;
-            this.buttonAddFiles.Text = "Add AGD File(s)...";
-            this.buttonAddFiles.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.buttonAddFiles.UseVisualStyleBackColor = true;
             // 
             // WorkFlowForm
             // 

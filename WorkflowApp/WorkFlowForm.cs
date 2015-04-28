@@ -25,6 +25,10 @@ namespace WorkflowApp
             {
                 comboBoxExportType.Items.Add(DataScoringExport.ExportType.Csv);
                 comboBoxExportType.Items.Add(DataScoringExport.ExportType.Excel);
+
+                comboBoxWtvAlgorithm.Items.Add(WorkFlowWorker.WTVAlgorithm.Troiano);
+                comboBoxWtvAlgorithm.Items.Add(WorkFlowWorker.WTVAlgorithm.Choi);
+
                 comboBoxWtvAlgorithm.SelectedIndex = 0;
                 comboBoxExportType.SelectedIndex = 0;
                 foreach (var filterExport in _workFlowWorker.FilterExports)
@@ -74,7 +78,7 @@ namespace WorkflowApp
             {
                 _workFlowWorker.DirectoryToSaveResults = textBoxDirectory.Text;
                 _workFlowWorker.ExportType = (DataScoringExport.ExportType) comboBoxExportType.SelectedItem;
-                _workFlowWorker.WearTimeValidationAlgorithm = comboBoxWtvAlgorithm.Text;
+                _workFlowWorker.WearTimeValidationAlgorithm = (WorkFlowWorker.WTVAlgorithm) comboBoxWtvAlgorithm.SelectedItem;
                 _workFlowWorker.WearTimeValidationMinimumPerDay = numericUpDown1.Value;
 
                 if (_lastFilter != null)
@@ -168,7 +172,7 @@ namespace WorkflowApp
 
             textBoxDirectory.Text = newWorkFlowWorker.DirectoryToSaveResults;
             comboBoxExportType.SelectedItem = newWorkFlowWorker.ExportType;
-            comboBoxWtvAlgorithm.Text = newWorkFlowWorker.WearTimeValidationAlgorithm;
+            comboBoxWtvAlgorithm.SelectedItem = newWorkFlowWorker.WearTimeValidationAlgorithm;
             numericUpDown1.Value = newWorkFlowWorker.WearTimeValidationMinimumPerDay;
 
             listBoxFilterExports.SelectedIndex = 0;
@@ -231,7 +235,7 @@ namespace WorkflowApp
 
             _workFlowWorker.DirectoryToSaveResults = textBoxDirectory.Text;
             _workFlowWorker.ExportType = (DataScoringExport.ExportType) comboBoxExportType.SelectedItem;
-            _workFlowWorker.WearTimeValidationAlgorithm = comboBoxWtvAlgorithm.Text;
+            _workFlowWorker.WearTimeValidationAlgorithm = (WorkFlowWorker.WTVAlgorithm) comboBoxWtvAlgorithm.SelectedItem;
             _workFlowWorker.WearTimeValidationMinimumPerDay = numericUpDown1.Value;
 
             using (var workflowProgress = new WorkflowProgress(_workFlowWorker))

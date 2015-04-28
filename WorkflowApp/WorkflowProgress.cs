@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using ActiLifeAPILibrary;
 using ActiLifeAPILibrary.Models.Actions;
+using ActiLifeAPILibrary.Models.WearTimeValidation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using DataScoringExport = ActiLifeAPILibrary.Models.Request.DataScoringExport;
@@ -32,20 +34,21 @@ namespace WorkflowApp
         {
             using (var api = new ActiLifeAPIConnection())
             {
-                richTextBox1.AppendText("Connecting to ActiLife API\r\n");
+                LogToTextBox("Connecting to ActiLife API\r\n");
                 try
                 {
                     await api.Connect(5000);
                 }
                 catch (Exceptions.APIConnectionException ex)
                 {
+                    LogToTextBox("Unable to connect to ActiLife API\r\n");
                     MessageBox.Show(this, ex.Message, "Can't connect to ActiLife!",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                richTextBox1.AppendText("Connected to ActiLife API\r\n");
+                LogToTextBox("Connected to ActiLife API\r\n");
 
-                richTextBox1.AppendText("Getting version of ActiLife API\r\n");
+                LogToTextBox("Getting version of ActiLife API\r\n");
                 /*
                 {
                     "Action": "APIVersion"
@@ -61,22 +64,43 @@ namespace WorkflowApp
                 {
                     JToken apiVersion;
                     if (((JObject) value).TryGetValue("version", StringComparison.CurrentCultureIgnoreCase, out apiVersion))
-                        richTextBox1.AppendText(string.Format("ActiLife API version: {0}", apiVersion));
+                        LogToTextBox(string.Format("ActiLife API version: {0}", apiVersion));
                 }
 
                 var files = _workFlowWorker.Files.ToArray();
-                
+
+                FloatingWindowWTVOptions floatingOptions = null;
+                switch (_workFlowWorker.WearTimeValidationAlgorithm)
+                {
+                    case WorkFlowWorker.WTVAlgorithm.Troiano:
+                        floatingOptions = TroianoWTVOptions.Default;
+                        floatingOptions.UseMinimumWearTimePerDay = true;
+                        floatingOptions.MinimumWearTimePerDayLength =
+                            (int) _workFlowWorker.WearTimeValidationMinimumPerDay;
+                        floatingOptions.MinimumWearTimePerDayUnits = FloatingWindowWTVOptions.Units.Minutes;
+                        break;
+                    case WorkFlowWorker.WTVAlgorithm.Choi:
+                        floatingOptions = ChoiWTVOptions.Default;
+                        floatingOptions.UseMinimumWearTimePerDay = true;
+                        floatingOptions.MinimumWearTimePerDayLength =
+                            (int) _workFlowWorker.WearTimeValidationMinimumPerDay;
+                        floatingOptions.MinimumWearTimePerDayUnits = FloatingWindowWTVOptions.Units.Minutes;
+                        break;
+                }
+
                 //calculate WTV
                 foreach (var file in files)
                 {
-                    richTextBox1.AppendText("Calculating Wear Time Validation for: " + file + "\r\n");
-
+                    LogToTextBox("Calculating Wear Time Validation for: " + file + "\r\n");
                     var wtv = new WearTimeValidation
                     {
                         Options =
                         {
-                            Algorithm = _workFlowWorker.WearTimeValidationAlgorithm, 
-                            FileInputPath = file
+                            Algorithm = _workFlowWorker.WearTimeValidationAlgorithm.ToString(),
+                            FileInputPath = file,
+                            ChoiOptions = _workFlowWorker.WearTimeValidationAlgorithm == WorkFlowWorker.WTVAlgorithm.Choi ? (ChoiWTVOptions) floatingOptions : null,
+                            TroianoOptions = _workFlowWorker.WearTimeValidationAlgorithm == WorkFlowWorker.WTVAlgorithm.Troiano ? (TroianoWTVOptions) floatingOptions : null
+
                         }
                     };
                     await api.WearTimeValidation(wtv);
@@ -85,7 +109,11 @@ namespace WorkflowApp
                 //loop through filter exports
                 foreach (var filterExport in _workFlowWorker.FilterExports)
                 {
-                    richTextBox1.AppendText("Calculating an exporting: " + filterExport.Name + "\r\n");
+                    string directory = _workFlowWorker.DirectoryToSaveResults + "\\" + filterExport.Name;
+                    if (!Directory.Exists(directory))
+                        Directory.CreateDirectory(directory);
+
+                    LogToTextBox("Calculating and exporting: " + filterExport.Name + " to directory: " + directory + "\r\n");
                     //calculate data scoring and export
 
                     var dataScoringExport = new DataScoringExport
@@ -93,7 +121,7 @@ namespace WorkflowApp
                         Options =
                         {
                             FileInputPaths = files,
-                            ExportLocation = _workFlowWorker.DirectoryToSaveResults,
+                            ExportLocation = directory,
                             ExportFileType = _workFlowWorker.ExportType,
                             CalculateEnergyExpenditure = false,
                             CalculateMETs = false,
@@ -135,9 +163,8 @@ namespace WorkflowApp
                     await api.DataScoringExport(dataScoringExport);
                 }
                 
-
                 //FINISH!
-                richTextBox1.AppendText("Finished!\r\n");
+                LogToTextBox("Finished!\r\n");
 
                 var foo = JsonConvert.SerializeObject(_workFlowWorker, Formatting.Indented);
 
@@ -145,6 +172,11 @@ namespace WorkflowApp
 
                 Console.WriteLine(bar);
             }
+        }
+
+        private void LogToTextBox(string message)
+        {
+            richTextBox1.AppendText(string.Format("{0:G} - " + message, DateTime.Now));
         }
     }
 }

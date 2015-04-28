@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using ActiLifeAPILibrary.Models.Actions;
 
@@ -6,6 +7,16 @@ namespace WorkflowApp
 {
     public class WorkFlowWorker
     {
+        [DefaultValue(Troiano)]
+        public enum WTVAlgorithm
+        {
+            /// <summary>2007 Troiano Algorithm</summary>
+            Troiano = 0,
+
+            /// <summary>2011 Choi Algorithm</summary>
+            Choi = 1
+        }
+
         public WorkFlowWorker()
         {
             Files = new List<string>(100);
@@ -15,14 +26,11 @@ namespace WorkflowApp
         }
 
         public List<string> Files { get; set; }
-
         public List<ScoringFilter> Filters { get; set; }
-
         public List<FilterExport> FilterExports;
-
         public string DirectoryToSaveResults { get; set; }
         public DataScoringExport.ExportType ExportType { get; set; }
-        public string WearTimeValidationAlgorithm { get; set; }
+        public WTVAlgorithm WearTimeValidationAlgorithm { get; set; }
         public decimal WearTimeValidationMinimumPerDay { get; set; }
 
         public void CreateDefaultFilterExports()
