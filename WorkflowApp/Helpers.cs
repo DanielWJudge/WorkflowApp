@@ -54,8 +54,8 @@ namespace WorkflowApp
 
         public static string SelectFolder(string startingDirectory = "")
         {
-            if (string.IsNullOrEmpty(startingDirectory) || !System.IO.Directory.Exists(startingDirectory))
-                startingDirectory = Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+            if (string.IsNullOrEmpty(startingDirectory) || !Directory.Exists(startingDirectory))
+                startingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
             if (VistaFileDialog.IsVistaFileDialogSupported)
                 using (var v = new VistaFolderBrowserDialog())
