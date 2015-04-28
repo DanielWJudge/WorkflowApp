@@ -34,21 +34,21 @@ namespace WorkflowApp
         {
             using (var api = new ActiLifeAPIConnection())
             {
-                LogToTextBox("Connecting to ActiLife API\r\n");
+                LogToTextBox("Connecting to ActiLife API");
                 try
                 {
                     await api.Connect(5000);
                 }
                 catch (Exceptions.APIConnectionException ex)
                 {
-                    LogToTextBox("Unable to connect to ActiLife API\r\n");
+                    LogToTextBox("Unable to connect to ActiLife API");
                     MessageBox.Show(this, ex.Message, "Can't connect to ActiLife!",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                LogToTextBox("Connected to ActiLife API\r\n");
+                LogToTextBox("Connected to ActiLife API");
 
-                LogToTextBox("Getting version of ActiLife API\r\n");
+                LogToTextBox("Getting version of ActiLife API");
                 /*
                 {
                     "Action": "APIVersion"
@@ -91,7 +91,7 @@ namespace WorkflowApp
                 //calculate WTV
                 foreach (var file in files)
                 {
-                    LogToTextBox("Calculating Wear Time Validation for: " + file + "\r\n");
+                    LogToTextBox("Calculating Wear Time Validation for: " + file);
                     var wtv = new WearTimeValidation
                     {
                         Options =
@@ -113,7 +113,7 @@ namespace WorkflowApp
                     if (!Directory.Exists(directory))
                         Directory.CreateDirectory(directory);
 
-                    LogToTextBox("Calculating and exporting: " + filterExport.Name + " to directory: " + directory + "\r\n");
+                    LogToTextBox("Calculating and exporting: " + filterExport.Name + " to directory: " + directory);
                     //calculate data scoring and export
 
                     var dataScoringExport = new DataScoringExport
@@ -164,7 +164,7 @@ namespace WorkflowApp
                 }
                 
                 //FINISH!
-                LogToTextBox("Finished!\r\n");
+                LogToTextBox("Finished!");
 
                 var foo = JsonConvert.SerializeObject(_workFlowWorker, Formatting.Indented);
 
@@ -176,7 +176,7 @@ namespace WorkflowApp
 
         private void LogToTextBox(string message)
         {
-            richTextBox1.AppendText(string.Format("{0:G} - " + message, DateTime.Now));
+            richTextBox1.AppendText(string.Format("{0:G} - {1}\r\n", DateTime.Now, message));
         }
     }
 }
