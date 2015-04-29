@@ -67,60 +67,73 @@ namespace WorkflowApp
                         LogToTextBox(string.Format("ActiLife API version: {0}", apiVersion));
                 }
 
-                var files = _workFlowWorker.Files.ToArray();
-
-                FloatingWindowWTVOptions floatingOptions = null;
-                switch (_workFlowWorker.WearTimeValidationAlgorithm)
+                if (_workFlowWorker.CalculateWearTimeValidation)
                 {
-                    case WorkFlowWorker.WTVAlgorithm.Troiano:
-                        floatingOptions = TroianoWTVOptions.Default;
-                        floatingOptions.UseMinimumWearTimePerDay = true;
-                        floatingOptions.MinimumWearTimePerDayLength =
-                            (int) _workFlowWorker.WearTimeValidationMinimumPerDay;
-                        floatingOptions.MinimumWearTimePerDayUnits = FloatingWindowWTVOptions.Units.Minutes;
-                        break;
-                    case WorkFlowWorker.WTVAlgorithm.Choi:
-                        floatingOptions = ChoiWTVOptions.Default;
-                        floatingOptions.UseMinimumWearTimePerDay = true;
-                        floatingOptions.MinimumWearTimePerDayLength =
-                            (int) _workFlowWorker.WearTimeValidationMinimumPerDay;
-                        floatingOptions.MinimumWearTimePerDayUnits = FloatingWindowWTVOptions.Units.Minutes;
-                        break;
-                }
-
-                //calculate WTV
-                foreach (var file in files)
-                {
-                    LogToTextBox("Calculating Wear Time Validation for: " + file);
-                    var wtv = new WearTimeValidation
+                    FloatingWindowWTVOptions floatingOptions = null;
+                    switch (_workFlowWorker.WearTimeValidationAlgorithm)
                     {
-                        Options =
-                        {
-                            Algorithm = _workFlowWorker.WearTimeValidationAlgorithm.ToString(),
-                            FileInputPath = file,
-                            ChoiOptions = _workFlowWorker.WearTimeValidationAlgorithm == WorkFlowWorker.WTVAlgorithm.Choi ? (ChoiWTVOptions) floatingOptions : null,
-                            TroianoOptions = _workFlowWorker.WearTimeValidationAlgorithm == WorkFlowWorker.WTVAlgorithm.Troiano ? (TroianoWTVOptions) floatingOptions : null
+                        case WorkFlowWorker.WTVAlgorithm.Troiano:
+                            floatingOptions = TroianoWTVOptions.Default;
+                            floatingOptions.UseMinimumWearTimePerDay = true;
+                            floatingOptions.MinimumWearTimePerDayLength =
+                                (int) _workFlowWorker.WearTimeValidationMinimumPerDay;
+                            floatingOptions.MinimumWearTimePerDayUnits = FloatingWindowWTVOptions.Units.Minutes;
+                            break;
+                        case WorkFlowWorker.WTVAlgorithm.Choi:
+                            floatingOptions = ChoiWTVOptions.Default;
+                            floatingOptions.UseMinimumWearTimePerDay = true;
+                            floatingOptions.MinimumWearTimePerDayLength =
+                                (int) _workFlowWorker.WearTimeValidationMinimumPerDay;
+                            floatingOptions.MinimumWearTimePerDayUnits = FloatingWindowWTVOptions.Units.Minutes;
+                            break;
+                    }
 
-                        }
-                    };
-                    await api.WearTimeValidation(wtv);
+                    //calculate WTV
+                    foreach (var file in _workFlowWorker.Files)
+                    {
+                        LogToTextBox("Calculating Wear Time Validation for: " + file);
+                        var wtv = new WearTimeValidation
+                        {
+                            Options =
+                            {
+                                Algorithm = _workFlowWorker.WearTimeValidationAlgorithm.ToString(),
+                                FileInputPath = file,
+                                ChoiOptions =
+                                    _workFlowWorker.WearTimeValidationAlgorithm == WorkFlowWorker.WTVAlgorithm.Choi
+                                        ? (ChoiWTVOptions) floatingOptions
+                                        : null,
+                                TroianoOptions =
+                                    _workFlowWorker.WearTimeValidationAlgorithm == WorkFlowWorker.WTVAlgorithm.Troiano
+                                        ? (TroianoWTVOptions) floatingOptions
+                                        : null
+
+                            }
+                        };
+                        await api.WearTimeValidation(wtv);
+                    }
                 }
-                
+
                 //loop through filter exports
                 foreach (var filterExport in _workFlowWorker.FilterExports)
                 {
+                    if (filterExport.Files.Count == 0)
+                    {
+                        LogToTextBox("NOT Calculating " + filterExport.Name + " because there aren't any files selected for it.");
+                        continue;
+                    }
+
                     string directory = _workFlowWorker.DirectoryToSaveResults + "\\" + filterExport.Name;
                     if (!Directory.Exists(directory))
                         Directory.CreateDirectory(directory);
 
-                    LogToTextBox("Calculating and exporting: " + filterExport.Name + " to directory: " + directory);
+                    LogToTextBox("Calculating " + filterExport.Files.Count +  " files and exporting: " + filterExport.Name + " to directory: " + directory);
                     //calculate data scoring and export
 
                     var dataScoringExport = new DataScoringExport
                     {
                         Options =
                         {
-                            FileInputPaths = files,
+                            FileInputPaths = filterExport.Files.ToArray(),
                             ExportLocation = directory,
                             ExportFileType = _workFlowWorker.ExportType,
                             CalculateEnergyExpenditure = false,

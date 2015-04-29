@@ -12,12 +12,12 @@ namespace WorkflowApp
     public partial class WorkFlowForm : Form
     {
         private WorkFlowWorker _workFlowWorker;
-        private FilterExport _lastFilter;
+        private FilterExport _currentFilterExport;
 
         public WorkFlowForm()
         {
             InitializeComponent();
-            _lastFilter = null;
+            _currentFilterExport = null;
             _workFlowWorker = new WorkFlowWorker();
             _workFlowWorker.CreateDefaultFilterExports();
 
@@ -49,7 +49,7 @@ namespace WorkflowApp
                 if (result == DialogResult.Yes)
                 {
                     _workFlowWorker.ClearFiles();
-                    listBoxFiles.Items.Clear();
+                    checkedListBoxFiles.Items.Clear();
                 }
             };
             buttonClearFilters.Click += (sender, args) =>
@@ -74,54 +74,89 @@ namespace WorkflowApp
                     textBoxDirectory.Text = currentDirectory;
             };
 
-            saveWorkspaceToolStripMenuItem.Click += (sender, args) =>
+            checkedListBoxFilters.ItemCheck += (sender, args) =>
             {
-                _workFlowWorker.DirectoryToSaveResults = textBoxDirectory.Text;
-                _workFlowWorker.ExportType = (DataScoringExport.ExportType) comboBoxExportType.SelectedItem;
-                _workFlowWorker.WearTimeValidationAlgorithm = (WorkFlowWorker.WTVAlgorithm) comboBoxWtvAlgorithm.SelectedItem;
-                _workFlowWorker.WearTimeValidationMinimumPerDay = numericUpDown1.Value;
+                if (_currentFilterExport != null)
+                    _currentFilterExport.SetUseForFilter((ScoringFilter) checkedListBoxFilters.SelectedItem, args.NewValue == CheckState.Checked);
+            };
 
-                if (_lastFilter != null)
+            checkedListBoxFiles.ItemCheck += (sender, args) =>
+            {
+                if (_currentFilterExport != null)
                 {
-                    var selectedItems = checkedListBoxFilters.CheckedItems;
-                    foreach (var scoringFilter in _lastFilter.ScoringFilters)
-                        scoringFilter.Use = false;
+                    var filename = (string) checkedListBoxFiles.SelectedItem;
 
-                    foreach (ScoringFilter selectedItem in selectedItems)
-                        _lastFilter.SetUseForFilter(selectedItem);
-                }
-
-                using (var saveDialog = new SaveFileDialog())
-                {
-                    saveDialog.Filter = "Workspace Files (*.agw)|*.agw";
-                    saveDialog.Title = "Select Location to Save Workspace";
-                    if (saveDialog.ShowDialog() != DialogResult.OK)
+                    if (string.IsNullOrEmpty(filename))
                         return;
 
-                    string filename = saveDialog.FileName;
-                    try
+                    switch (args.NewValue)
                     {
-                        using (var fileWriter = new StreamWriter(filename))
-                        {
-                            string json = JsonConvert.SerializeObject(_workFlowWorker, Formatting.Indented);
-                            fileWriter.Write(json);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(this, "Unable to save workspace file: " + ex.Message, "Workspace Not Saved",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        case CheckState.Checked:
+                            _currentFilterExport.Files.Add(filename);
+                            break;
+                        default:
+                            if (_currentFilterExport.Files.Contains(filename))
+                                _currentFilterExport.Files.Remove(filename);
+                            break;
                     }
                 }
             };
 
+            saveWorkspaceToolStripMenuItem.Click += (sender, args) => SaveWorkspace();
+
             openWorkspaceToolStripMenuItem.Click += (sender, args) => OpenWorkspace();
             
-            listBoxFilterExports.SelectedIndexChanged += (sender, args) => SaveFiltersAndUpdateUI();
+            listBoxFilterExports.SelectedIndexChanged += (sender, args) => SelectedExportChanged();
 
             buttonOpenFilters.Click += (sender, args) => OpenFilters();
 
             buttonCalculate.Click += (sender, args) => CalculateRunExport();
+
+            linkLabelSelectAllFiles.Click += (sender, args) =>
+            {
+                if (_currentFilterExport == null)
+                    return;
+
+                for (int i = 0; i < checkedListBoxFiles.Items.Count; i++)
+                    checkedListBoxFiles.SetItemChecked(i, true);
+
+                _currentFilterExport.Files.Clear();
+                _currentFilterExport.Files.AddRange(_workFlowWorker.Files.Where(x => !string.IsNullOrEmpty(x)));
+            };
+
+            checkBoxCalculateWtv.CheckedChanged +=
+                (sender, args) => _workFlowWorker.CalculateWearTimeValidation = checkBoxCalculateWtv.Checked;
+        }
+
+        private void SaveWorkspace()
+        {
+            _workFlowWorker.DirectoryToSaveResults = textBoxDirectory.Text;
+            _workFlowWorker.ExportType = (DataScoringExport.ExportType) comboBoxExportType.SelectedItem;
+            _workFlowWorker.WearTimeValidationAlgorithm = (WorkFlowWorker.WTVAlgorithm) comboBoxWtvAlgorithm.SelectedItem;
+            _workFlowWorker.WearTimeValidationMinimumPerDay = numericUpDown1.Value;
+
+            using (var saveDialog = new SaveFileDialog())
+            {
+                saveDialog.Filter = "Workspace Files (*.agw)|*.agw";
+                saveDialog.Title = "Select Location to Save Workspace";
+                if (saveDialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                string filename = saveDialog.FileName;
+                try
+                {
+                    using (var fileWriter = new StreamWriter(filename))
+                    {
+                        string json = JsonConvert.SerializeObject(_workFlowWorker, Formatting.Indented);
+                        fileWriter.Write(json);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "Unable to save workspace file: " + ex.Message, "Workspace Not Saved",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void OpenWorkspace()
@@ -156,11 +191,9 @@ namespace WorkflowApp
                     return;
                 }
             }
-            
-            listBoxFiles.Items.Clear();
-            checkedListBoxFilters.Items.Clear();
-            AddFiles(newWorkFlowWorker.Files);
 
+            checkedListBoxFiles.Items.Clear();
+            checkedListBoxFilters.Items.Clear();
             listBoxFilterExports.Items.Clear();
 
             foreach (var filterExport in newWorkFlowWorker.FilterExports)
@@ -169,6 +202,10 @@ namespace WorkflowApp
             checkedListBoxFilters.Items.Clear();
             foreach (var filter in newWorkFlowWorker.Filters)
                 checkedListBoxFilters.Items.Add(filter);
+
+            checkedListBoxFiles.Items.Clear();
+            foreach (var file in newWorkFlowWorker.Files)
+                checkedListBoxFiles.Items.Add(file);
 
             textBoxDirectory.Text = newWorkFlowWorker.DirectoryToSaveResults;
             comboBoxExportType.SelectedItem = newWorkFlowWorker.ExportType;
@@ -179,6 +216,9 @@ namespace WorkflowApp
             comboBoxWtvAlgorithm.SelectedIndex = 0;
             comboBoxExportType.SelectedIndex = 0;
             _workFlowWorker = newWorkFlowWorker;
+
+            labelFilesCount.Text = string.Format("{0} files loaded", _workFlowWorker.Files.Count);
+            labelFiltersCount.Text = string.Format("{0} filters loaded", _workFlowWorker.Filters.Count);
         }
 
         private void CalculateRunExport()
@@ -203,17 +243,6 @@ namespace WorkflowApp
             //make sure we have global date/time filters loaded
             if (_workFlowWorker.Filters.Count == 0)
                 sb.AppendLine("No global date/time filters were loaded.");
-
-            //make sure we save any last minute changes to the list of global date/time filters
-            if (_lastFilter != null)
-            {
-                var selectedItems = checkedListBoxFilters.CheckedItems;
-                foreach (var scoringFilter in _lastFilter.ScoringFilters)
-                    scoringFilter.Use = false;
-
-                foreach (ScoringFilter selectedItem in selectedItems)
-                    _lastFilter.SetUseForFilter(selectedItem);
-            }
 
             //make sure each filter export has at least one global date/time filter loaded
             foreach (var filterExport in _workFlowWorker.FilterExports)
@@ -242,34 +271,38 @@ namespace WorkflowApp
                 workflowProgress.ShowDialog(this);
         }
 
-        private void SaveFiltersAndUpdateUI()
+        private void SelectedExportChanged()
         {
-            if (_lastFilter == null)
+            checkedListBoxFilters.SelectedItem = null;
+            checkedListBoxFiles.SelectedItem = null;
+
+            if (_currentFilterExport == null)
             {
                 checkedListBoxFilters.ClearSelected();
-                _lastFilter = (FilterExport)listBoxFilterExports.SelectedItem;
+                checkedListBoxFiles.ClearSelected();
+                _currentFilterExport = (FilterExport)listBoxFilterExports.SelectedItem;
                 return;
             }
-
-            var selectedItems = checkedListBoxFilters.CheckedItems;
-            foreach (var scoringFilter in _lastFilter.ScoringFilters)
-                scoringFilter.Use = false;
-
-            foreach (ScoringFilter selectedItem in selectedItems)
-                _lastFilter.SetUseForFilter(selectedItem);
-
-            _lastFilter = (FilterExport) listBoxFilterExports.SelectedItem;
+            
+            _currentFilterExport = (FilterExport) listBoxFilterExports.SelectedItem;
 
             for (int i = 0; i < checkedListBoxFilters.Items.Count; i++)
                 checkedListBoxFilters.SetItemChecked(i, false);
 
-            IEnumerable<ScoringFilter> scoringFilters = _lastFilter.ScoringFilters.Where(x => x.Use);
-            if (!scoringFilters.Any())
-                return;
+            for (int i = 0; i < checkedListBoxFiles.Items.Count; i++)
+                checkedListBoxFiles.SetItemChecked(i, false);
 
-            for (int i = 0; i < checkedListBoxFilters.Items.Count; i++)
-                if (scoringFilters.Contains(checkedListBoxFilters.Items[i]))
-                    checkedListBoxFilters.SetItemChecked(i, true);
+            var scoringFilters = _currentFilterExport.ScoringFilters.Where(x => x.Use);
+            if (scoringFilters.Any())
+                for (int i = 0; i < checkedListBoxFilters.Items.Count; i++)
+                    if (scoringFilters.Contains(checkedListBoxFilters.Items[i]))
+                        checkedListBoxFilters.SetItemChecked(i, true);
+
+            var files = _currentFilterExport.Files;
+            if (files.Any())
+                for (int i = 0; i < checkedListBoxFiles.Items.Count; i++)
+                    if (files.Contains(checkedListBoxFiles.Items[i]))
+                        checkedListBoxFiles.SetItemChecked(i, true);
         }
 
         private void OpenFilters()
@@ -300,6 +333,8 @@ namespace WorkflowApp
                             checkedListBoxFilters.Items.Clear();
                             foreach (var filter in _workFlowWorker.Filters)
                                 checkedListBoxFilters.Items.Add(filter);
+
+                            labelFiltersCount.Text = string.Format("{0} filters loaded", _workFlowWorker.Filters.Count);
                         }
                         catch
                         {
@@ -344,9 +379,11 @@ namespace WorkflowApp
         private void AddFiles(IEnumerable<string> files)
         {
             _workFlowWorker.AddFiles(files);
-            listBoxFiles.Items.Clear();
+            checkedListBoxFiles.Items.Clear();
             foreach (var file in _workFlowWorker.Files)
-                listBoxFiles.Items.Add(file);
+                checkedListBoxFiles.Items.Add(file);
+
+            labelFilesCount.Text = string.Format("{0} files loaded", _workFlowWorker.Files.Count);
         }
     }
 }

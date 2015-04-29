@@ -8,18 +8,24 @@ namespace WorkflowApp
         public string Name { get; set; }
 
         public List<ScoringFilter> ScoringFilters { get; set; }
+
+        public List<string> Files { get; set; }
         
         public FilterExport(string name)
         {
             Name = name;
             ScoringFilters = new List<ScoringFilter>();
+            Files = new List<string>();
         }
 
-        public void SetUseForFilter(ScoringFilter filter)
+        public void SetUseForFilter(ScoringFilter filter, bool use)
         {
             foreach (var scoringFilter in ScoringFilters)
                 if (scoringFilter.Equals(filter))
-                    scoringFilter.Use = true;
+                {
+                    scoringFilter.Use = use;
+                    return;
+                }
         }
 
         public void AddFilter(ScoringFilter filter)
@@ -36,6 +42,11 @@ namespace WorkflowApp
         public void ClearFilters()
         {
             ScoringFilters.Clear();
+        }
+
+        public void ClearFiles()
+        {
+            Files.Clear();
         }
 
         public override string ToString()

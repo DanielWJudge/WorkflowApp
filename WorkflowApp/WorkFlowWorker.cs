@@ -23,20 +23,22 @@ namespace WorkflowApp
             Filters = new List<ScoringFilter>(50);
             FilterExports = new List<FilterExport>(12);
             DirectoryToSaveResults = "";
+            CalculateWearTimeValidation = true;
         }
-
-        public List<string> Files { get; set; }
-        public List<ScoringFilter> Filters { get; set; }
+        
         public List<FilterExport> FilterExports;
         public string DirectoryToSaveResults { get; set; }
         public DataScoringExport.ExportType ExportType { get; set; }
         public WTVAlgorithm WearTimeValidationAlgorithm { get; set; }
         public decimal WearTimeValidationMinimumPerDay { get; set; }
+        public List<string> Files { get; set; }
+        public List<ScoringFilter> Filters { get; set; }
+        public bool CalculateWearTimeValidation { get; set; }
 
         public void CreateDefaultFilterExports()
         {
             FilterExports.Add(new FilterExport("Total weekly PA"));
-            FilterExports.Add(new FilterExport("Leisure time (school end bell to start bell on next school day)"));
+            FilterExports.Add(new FilterExport("Leisure time (school end to start)"));
             FilterExports.Add(new FilterExport("Leisure time (weekdays only)"));
             FilterExports.Add(new FilterExport("Leisure time (weekend only)"));
             FilterExports.Add(new FilterExport("School day (bell to bell)"));
@@ -57,6 +59,9 @@ namespace WorkflowApp
         public void ClearFiles()
         {
             Files.Clear();
+
+            foreach (FilterExport filterExport in FilterExports)
+                filterExport.ClearFiles();
         }
 
         public void AddFilters(IEnumerable<ScoringFilter> filters)
