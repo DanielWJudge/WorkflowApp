@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using ActiLifeAPILibrary;
 using ActiLifeAPILibrary.Models.Actions;
 using ActiLifeAPILibrary.Models.WearTimeValidation;
+using CsvHelper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using DataScoringExport = ActiLifeAPILibrary.Models.Request.DataScoringExport;
@@ -49,12 +51,6 @@ namespace WorkflowApp
                 LogToTextBox("Connected to ActiLife API");
 
                 LogToTextBox("Getting version of ActiLife API");
-                /*
-                {
-                    "Action": "APIVersion"
-                }
-                 * */
-
                 var apiVersionResponse = await api.APIVersion();
 
                 JObject jobject = JsonConvert.DeserializeObject<JObject>(apiVersionResponse);
@@ -69,6 +65,8 @@ namespace WorkflowApp
 
                 if (_workFlowWorker.CalculateWearTimeValidation)
                 {
+                    List<WtvResult> wtvResults = new List<WtvResult>(_workFlowWorker.Files.Count);
+
                     FloatingWindowWTVOptions floatingOptions = null;
                     switch (_workFlowWorker.WearTimeValidationAlgorithm)
                     {
@@ -109,7 +107,42 @@ namespace WorkflowApp
 
                             }
                         };
-                        await api.WearTimeValidation(wtv);
+                        var wtvResponse = await api.WearTimeValidation(wtv);
+
+                        jobject = JsonConvert.DeserializeObject<JObject>(wtvResponse);
+
+
+                        if (jobject.TryGetValue("Payload", StringComparison.CurrentCultureIgnoreCase, out value))
+                        {
+                            WtvResult wtvResult = JsonConvert.DeserializeObject<WtvResult>(value.ToString());
+                            wtvResults.Add(wtvResult);
+                        }
+                    }
+                    
+                    LogToTextBox("Creating Wear Time Validation CSV Export");
+                    var columnNames = wtvResults[0].SummaryStats.Keys;
+                    string wtvExportFilename = _workFlowWorker.DirectoryToSaveResults + "\\WearTimeValidationResults.csv";
+                    using (var writer = new StreamWriter(wtvExportFilename))
+                    using (var csv = new CsvWriter(writer))
+                    {
+                        csv.WriteField("Filename");
+                        csv.WriteField("Subject Name");
+                        csv.WriteField("Serial Number");
+                        foreach (var columnName in columnNames)
+                            csv.WriteField(columnName);
+
+                        csv.NextRecord();
+
+                        foreach (var wtvResult in wtvResults)
+                        {
+                            csv.WriteField(wtvResult.Filename);
+                            csv.WriteField(wtvResult.SubjectName);
+                            csv.WriteField(wtvResult.SerialNumber);
+                            foreach (var columnName in columnNames)
+                                csv.WriteField(wtvResult.SummaryStats[columnName]);
+
+                            csv.NextRecord();
+                        }
                     }
                 }
 

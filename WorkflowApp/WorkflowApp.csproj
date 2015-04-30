@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsvHelper">
+      <HintPath>..\packages\CsvHelper.2.13.0.0\lib\net40-client\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
@@ -91,6 +94,7 @@
       <DependentUpon>WorkflowProgress.cs</DependentUpon>
     </Compile>
     <Compile Include="WorkFlowWorker.cs" />
+    <Compile Include="WtvResult.cs" />
     <EmbeddedResource Include="WorkFlowForm.resx">
       <DependentUpon>WorkFlowForm.cs</DependentUpon>
     </EmbeddedResource>
