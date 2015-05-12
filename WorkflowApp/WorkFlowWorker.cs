@@ -48,7 +48,13 @@ namespace WorkflowApp
             FilterExports.Add(new FilterExport("PE Lesson 1 (bell to bell)"));
             FilterExports.Add(new FilterExport("PE Lesson 2 (bell to bell)"));
             FilterExports.Add(new FilterExport("PE Lesson 3 (bell to bell)"));
-            FilterExports.Add(new FilterExport("Whole days"));
+            FilterExports.Add(new FilterExport("Sunday"));
+            FilterExports.Add(new FilterExport("Monday"));
+            FilterExports.Add(new FilterExport("Tuesday"));
+            FilterExports.Add(new FilterExport("Wednesday"));
+            FilterExports.Add(new FilterExport("Thursday"));
+            FilterExports.Add(new FilterExport("Friday"));
+            FilterExports.Add(new FilterExport("Saturday"));
         }
 
         public void AddFiles(IEnumerable<string> fileNames)
