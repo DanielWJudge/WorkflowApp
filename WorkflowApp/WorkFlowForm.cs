@@ -50,6 +50,7 @@ namespace WorkflowApp
                 {
                     _workFlowWorker.ClearFiles();
                     checkedListBoxFiles.Items.Clear();
+                    labelFilesCount.Text = string.Format("{0} files loaded", _workFlowWorker.Files.Count);
                 }
             };
             buttonClearFilters.Click += (sender, args) =>
@@ -62,6 +63,7 @@ namespace WorkflowApp
                 {
                     _workFlowWorker.ClearFilters();
                     checkedListBoxFilters.Items.Clear();
+                    labelFiltersCount.Text = string.Format("{0} filters loaded", _workFlowWorker.Filters.Count);
                 }
             };
 
@@ -132,6 +134,7 @@ namespace WorkflowApp
         {
             _workFlowWorker.DirectoryToSaveResults = textBoxDirectory.Text;
             _workFlowWorker.ExportType = (DataScoringExport.ExportType) comboBoxExportType.SelectedItem;
+            _workFlowWorker.CalculateWearTimeValidation = checkBoxCalculateWtv.Checked;
             _workFlowWorker.WearTimeValidationAlgorithm = (WorkFlowWorker.WTVAlgorithm) comboBoxWtvAlgorithm.SelectedItem;
             _workFlowWorker.WearTimeValidationMinimumPerDay = numericUpDown1.Value;
 
@@ -209,6 +212,8 @@ namespace WorkflowApp
 
             textBoxDirectory.Text = newWorkFlowWorker.DirectoryToSaveResults;
             comboBoxExportType.SelectedItem = newWorkFlowWorker.ExportType;
+
+            checkBoxCalculateWtv.Checked = newWorkFlowWorker.CalculateWearTimeValidation;
             comboBoxWtvAlgorithm.SelectedItem = newWorkFlowWorker.WearTimeValidationAlgorithm;
             numericUpDown1.Value = newWorkFlowWorker.WearTimeValidationMinimumPerDay;
 
