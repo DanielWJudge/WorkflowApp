@@ -48,9 +48,12 @@
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.labelFiltersCount = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.buttonAddFiles = new WorkflowApp.SplitButton();
             this.labelFilesCount = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.checkBoxCalculateWtv = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.linkLabelSelectAllFiles = new System.Windows.Forms.LinkLabel();
             this.label7 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.checkedListBoxFiles = new System.Windows.Forms.CheckedListBox();
@@ -62,9 +65,6 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.openWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.linkLabelSelectAllFiles = new System.Windows.Forms.LinkLabel();
-            this.buttonAddFiles = new WorkflowApp.SplitButton();
-            this.checkBoxCalculateWtv = new System.Windows.Forms.CheckBox();
             this.contextMenuStripAddDataScoring.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -262,6 +262,20 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(558, 34);
             this.flowLayoutPanel1.TabIndex = 10;
             // 
+            // buttonAddFiles
+            // 
+            this.buttonAddFiles.AutoSize = true;
+            this.buttonAddFiles.ContextMenuStrip = this.contextMenuStripAddDataScoring;
+            this.buttonAddFiles.Dock = System.Windows.Forms.DockStyle.Left;
+            this.buttonAddFiles.Location = new System.Drawing.Point(3, 3);
+            this.buttonAddFiles.Name = "buttonAddFiles";
+            this.buttonAddFiles.Size = new System.Drawing.Size(136, 27);
+            this.buttonAddFiles.SplitMenuStrip = this.contextMenuStripAddDataScoring;
+            this.buttonAddFiles.TabIndex = 4;
+            this.buttonAddFiles.Text = "Add AGD File(s)...";
+            this.buttonAddFiles.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.buttonAddFiles.UseVisualStyleBackColor = true;
+            // 
             // labelFilesCount
             // 
             this.labelFilesCount.AutoSize = true;
@@ -288,6 +302,18 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Select Wear Time Validation Options";
             // 
+            // checkBoxCalculateWtv
+            // 
+            this.checkBoxCalculateWtv.AutoSize = true;
+            this.checkBoxCalculateWtv.Checked = true;
+            this.checkBoxCalculateWtv.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxCalculateWtv.Location = new System.Drawing.Point(26, 31);
+            this.checkBoxCalculateWtv.Name = "checkBoxCalculateWtv";
+            this.checkBoxCalculateWtv.Size = new System.Drawing.Size(208, 21);
+            this.checkBoxCalculateWtv.TabIndex = 9;
+            this.checkBoxCalculateWtv.Text = "Calculate Wear Time Validation";
+            this.checkBoxCalculateWtv.UseVisualStyleBackColor = true;
+            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.linkLabelSelectAllFiles);
@@ -305,6 +331,16 @@
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Select Filters for Each Export";
+            // 
+            // linkLabelSelectAllFiles
+            // 
+            this.linkLabelSelectAllFiles.AutoSize = true;
+            this.linkLabelSelectAllFiles.Location = new System.Drawing.Point(791, 34);
+            this.linkLabelSelectAllFiles.Name = "linkLabelSelectAllFiles";
+            this.linkLabelSelectAllFiles.Size = new System.Drawing.Size(89, 17);
+            this.linkLabelSelectAllFiles.TabIndex = 15;
+            this.linkLabelSelectAllFiles.TabStop = true;
+            this.linkLabelSelectAllFiles.Text = "Select All Files";
             // 
             // label7
             // 
@@ -417,42 +453,6 @@
             this.saveWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(129, 20);
             this.saveWorkspaceToolStripMenuItem.Text = "Save Workspace...";
             // 
-            // linkLabelSelectAllFiles
-            // 
-            this.linkLabelSelectAllFiles.AutoSize = true;
-            this.linkLabelSelectAllFiles.Location = new System.Drawing.Point(791, 34);
-            this.linkLabelSelectAllFiles.Name = "linkLabelSelectAllFiles";
-            this.linkLabelSelectAllFiles.Size = new System.Drawing.Size(89, 17);
-            this.linkLabelSelectAllFiles.TabIndex = 15;
-            this.linkLabelSelectAllFiles.TabStop = true;
-            this.linkLabelSelectAllFiles.Text = "Select All Files";
-            // 
-            // buttonAddFiles
-            // 
-            this.buttonAddFiles.AutoSize = true;
-            this.buttonAddFiles.ContextMenuStrip = this.contextMenuStripAddDataScoring;
-            this.buttonAddFiles.Dock = System.Windows.Forms.DockStyle.Left;
-            this.buttonAddFiles.Location = new System.Drawing.Point(3, 3);
-            this.buttonAddFiles.Name = "buttonAddFiles";
-            this.buttonAddFiles.Size = new System.Drawing.Size(136, 27);
-            this.buttonAddFiles.SplitMenuStrip = this.contextMenuStripAddDataScoring;
-            this.buttonAddFiles.TabIndex = 4;
-            this.buttonAddFiles.Text = "Add AGD File(s)...";
-            this.buttonAddFiles.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.buttonAddFiles.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxCalculateWtv
-            // 
-            this.checkBoxCalculateWtv.AutoSize = true;
-            this.checkBoxCalculateWtv.Checked = true;
-            this.checkBoxCalculateWtv.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxCalculateWtv.Location = new System.Drawing.Point(26, 31);
-            this.checkBoxCalculateWtv.Name = "checkBoxCalculateWtv";
-            this.checkBoxCalculateWtv.Size = new System.Drawing.Size(208, 21);
-            this.checkBoxCalculateWtv.TabIndex = 9;
-            this.checkBoxCalculateWtv.Text = "Calculate Wear Time Validation";
-            this.checkBoxCalculateWtv.UseVisualStyleBackColor = true;
-            // 
             // WorkFlowForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -465,6 +465,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
+            this.MinimumSize = new System.Drawing.Size(981, 659);
             this.Name = "WorkFlowForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
