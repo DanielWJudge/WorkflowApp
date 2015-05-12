@@ -200,6 +200,22 @@ namespace WorkflowApp
             listBoxFilterExports.Items.Clear();
 
             foreach (var filterExport in newWorkFlowWorker.FilterExports)
+            {
+                if (filterExport.Name.Equals("Whole days", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    newWorkFlowWorker.FilterExports.Remove(filterExport);
+                    newWorkFlowWorker.FilterExports.Add(new FilterExport("Sunday"));
+                    newWorkFlowWorker.FilterExports.Add(new FilterExport("Monday"));
+                    newWorkFlowWorker.FilterExports.Add(new FilterExport("Tuesday"));
+                    newWorkFlowWorker.FilterExports.Add(new FilterExport("Wednesday"));
+                    newWorkFlowWorker.FilterExports.Add(new FilterExport("Thursday"));
+                    newWorkFlowWorker.FilterExports.Add(new FilterExport("Friday"));
+                    newWorkFlowWorker.FilterExports.Add(new FilterExport("Saturday"));
+                    break;
+                }
+            }
+
+            foreach (var filterExport in newWorkFlowWorker.FilterExports)
                 listBoxFilterExports.Items.Add(filterExport);
 
             checkedListBoxFilters.Items.Clear();
