@@ -44,15 +44,14 @@
             this.label6 = new System.Windows.Forms.Label();
             this.textBoxDirectory = new System.Windows.Forms.TextBox();
             this.buttonSelectFolder = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBoxOpenFilesFilters = new System.Windows.Forms.GroupBox();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.labelFiltersCount = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.buttonAddFiles = new WorkflowApp.SplitButton();
             this.labelFilesCount = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBoxWtv = new System.Windows.Forms.GroupBox();
             this.checkBoxCalculateWtv = new System.Windows.Forms.CheckBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBoxExports = new System.Windows.Forms.GroupBox();
             this.linkLabelSelectAllFiles = new System.Windows.Forms.LinkLabel();
             this.label7 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -65,15 +64,21 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.openWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.groupBoxDataScoring = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.comboBoxCutPoint = new System.Windows.Forms.ComboBox();
+            this.checkBoxCalculateBouts = new System.Windows.Forms.CheckBox();
+            this.buttonAddFiles = new WorkflowApp.SplitButton();
             this.contextMenuStripAddDataScoring.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            this.groupBox1.SuspendLayout();
+            this.groupBoxOpenFilesFilters.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
+            this.groupBoxWtv.SuspendLayout();
+            this.groupBoxExports.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.groupBoxDataScoring.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStripAddDataScoring
@@ -159,7 +164,7 @@
             this.checkedListBoxFilters.FormattingEnabled = true;
             this.checkedListBoxFilters.Location = new System.Drawing.Point(313, 57);
             this.checkedListBoxFilters.Name = "checkedListBoxFilters";
-            this.checkedListBoxFilters.Size = new System.Drawing.Size(461, 304);
+            this.checkedListBoxFilters.Size = new System.Drawing.Size(461, 224);
             this.checkedListBoxFilters.TabIndex = 10;
             // 
             // buttonClearFilters
@@ -219,18 +224,18 @@
             this.buttonSelectFolder.Text = "Select Folder to Save Files...";
             this.buttonSelectFolder.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
+            // groupBoxOpenFilesFilters
             // 
-            this.groupBox1.Controls.Add(this.flowLayoutPanel2);
-            this.groupBox1.Controls.Add(this.flowLayoutPanel1);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(10, 36);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1281, 117);
-            this.groupBox1.TabIndex = 2;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Select Files and Filters to Calculate";
+            this.groupBoxOpenFilesFilters.Controls.Add(this.flowLayoutPanel2);
+            this.groupBoxOpenFilesFilters.Controls.Add(this.flowLayoutPanel1);
+            this.groupBoxOpenFilesFilters.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxOpenFilesFilters.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBoxOpenFilesFilters.Location = new System.Drawing.Point(10, 36);
+            this.groupBoxOpenFilesFilters.Name = "groupBoxOpenFilesFilters";
+            this.groupBoxOpenFilesFilters.Size = new System.Drawing.Size(1281, 117);
+            this.groupBoxOpenFilesFilters.TabIndex = 2;
+            this.groupBoxOpenFilesFilters.TabStop = false;
+            this.groupBoxOpenFilesFilters.Text = "Select Files and Filters to Calculate";
             // 
             // flowLayoutPanel2
             // 
@@ -262,20 +267,6 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(558, 34);
             this.flowLayoutPanel1.TabIndex = 10;
             // 
-            // buttonAddFiles
-            // 
-            this.buttonAddFiles.AutoSize = true;
-            this.buttonAddFiles.ContextMenuStrip = this.contextMenuStripAddDataScoring;
-            this.buttonAddFiles.Dock = System.Windows.Forms.DockStyle.Left;
-            this.buttonAddFiles.Location = new System.Drawing.Point(3, 3);
-            this.buttonAddFiles.Name = "buttonAddFiles";
-            this.buttonAddFiles.Size = new System.Drawing.Size(136, 27);
-            this.buttonAddFiles.SplitMenuStrip = this.contextMenuStripAddDataScoring;
-            this.buttonAddFiles.TabIndex = 4;
-            this.buttonAddFiles.Text = "Add AGD File(s)...";
-            this.buttonAddFiles.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.buttonAddFiles.UseVisualStyleBackColor = true;
-            // 
             // labelFilesCount
             // 
             this.labelFilesCount.AutoSize = true;
@@ -286,21 +277,21 @@
             this.labelFilesCount.TabIndex = 5;
             this.labelFilesCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // groupBox2
+            // groupBoxWtv
             // 
-            this.groupBox2.Controls.Add(this.checkBoxCalculateWtv);
-            this.groupBox2.Controls.Add(this.numericUpDown1);
-            this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.comboBoxWtvAlgorithm);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(10, 153);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(1281, 67);
-            this.groupBox2.TabIndex = 3;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Select Wear Time Validation Options";
+            this.groupBoxWtv.Controls.Add(this.checkBoxCalculateWtv);
+            this.groupBoxWtv.Controls.Add(this.numericUpDown1);
+            this.groupBoxWtv.Controls.Add(this.label4);
+            this.groupBoxWtv.Controls.Add(this.label5);
+            this.groupBoxWtv.Controls.Add(this.comboBoxWtvAlgorithm);
+            this.groupBoxWtv.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxWtv.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBoxWtv.Location = new System.Drawing.Point(10, 153);
+            this.groupBoxWtv.Name = "groupBoxWtv";
+            this.groupBoxWtv.Size = new System.Drawing.Size(1281, 67);
+            this.groupBoxWtv.TabIndex = 3;
+            this.groupBoxWtv.TabStop = false;
+            this.groupBoxWtv.Text = "Select Wear Time Validation Options";
             // 
             // checkBoxCalculateWtv
             // 
@@ -314,23 +305,23 @@
             this.checkBoxCalculateWtv.Text = "Calculate Wear Time Validation";
             this.checkBoxCalculateWtv.UseVisualStyleBackColor = true;
             // 
-            // groupBox3
+            // groupBoxExports
             // 
-            this.groupBox3.Controls.Add(this.linkLabelSelectAllFiles);
-            this.groupBox3.Controls.Add(this.label7);
-            this.groupBox3.Controls.Add(this.label3);
-            this.groupBox3.Controls.Add(this.checkedListBoxFiles);
-            this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Controls.Add(this.listBoxFilterExports);
-            this.groupBox3.Controls.Add(this.checkedListBoxFilters);
-            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox3.Location = new System.Drawing.Point(10, 220);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(1281, 376);
-            this.groupBox3.TabIndex = 4;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Select Filters for Each Export";
+            this.groupBoxExports.Controls.Add(this.linkLabelSelectAllFiles);
+            this.groupBoxExports.Controls.Add(this.label7);
+            this.groupBoxExports.Controls.Add(this.label3);
+            this.groupBoxExports.Controls.Add(this.checkedListBoxFiles);
+            this.groupBoxExports.Controls.Add(this.label2);
+            this.groupBoxExports.Controls.Add(this.listBoxFilterExports);
+            this.groupBoxExports.Controls.Add(this.checkedListBoxFilters);
+            this.groupBoxExports.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBoxExports.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBoxExports.Location = new System.Drawing.Point(10, 287);
+            this.groupBoxExports.Name = "groupBoxExports";
+            this.groupBoxExports.Size = new System.Drawing.Size(1281, 309);
+            this.groupBoxExports.TabIndex = 4;
+            this.groupBoxExports.TabStop = false;
+            this.groupBoxExports.Text = "Select Filters for Each Export";
             // 
             // linkLabelSelectAllFiles
             // 
@@ -369,7 +360,7 @@
             this.checkedListBoxFiles.FormattingEnabled = true;
             this.checkedListBoxFiles.Location = new System.Drawing.Point(794, 57);
             this.checkedListBoxFiles.Name = "checkedListBoxFiles";
-            this.checkedListBoxFiles.Size = new System.Drawing.Size(481, 304);
+            this.checkedListBoxFiles.Size = new System.Drawing.Size(481, 224);
             this.checkedListBoxFiles.TabIndex = 12;
             // 
             // label2
@@ -389,7 +380,7 @@
             this.listBoxFilterExports.ItemHeight = 17;
             this.listBoxFilterExports.Location = new System.Drawing.Point(26, 57);
             this.listBoxFilterExports.Name = "listBoxFilterExports";
-            this.listBoxFilterExports.Size = new System.Drawing.Size(255, 293);
+            this.listBoxFilterExports.Size = new System.Drawing.Size(255, 225);
             this.listBoxFilterExports.TabIndex = 11;
             // 
             // groupBox4
@@ -453,17 +444,76 @@
             this.saveWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(129, 20);
             this.saveWorkspaceToolStripMenuItem.Text = "Save Workspace...";
             // 
+            // groupBoxDataScoring
+            // 
+            this.groupBoxDataScoring.Controls.Add(this.checkBoxCalculateBouts);
+            this.groupBoxDataScoring.Controls.Add(this.label8);
+            this.groupBoxDataScoring.Controls.Add(this.comboBoxCutPoint);
+            this.groupBoxDataScoring.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxDataScoring.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBoxDataScoring.Location = new System.Drawing.Point(10, 220);
+            this.groupBoxDataScoring.Name = "groupBoxDataScoring";
+            this.groupBoxDataScoring.Size = new System.Drawing.Size(1281, 67);
+            this.groupBoxDataScoring.TabIndex = 9;
+            this.groupBoxDataScoring.TabStop = false;
+            this.groupBoxDataScoring.Text = "Data Scoring Calculation Extras";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(22, 31);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(124, 17);
+            this.label8.TabIndex = 7;
+            this.label8.Text = "Cut Point Algorithm:";
+            // 
+            // comboBoxCutPoint
+            // 
+            this.comboBoxCutPoint.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCutPoint.FormattingEnabled = true;
+            this.comboBoxCutPoint.Location = new System.Drawing.Point(152, 28);
+            this.comboBoxCutPoint.Name = "comboBoxCutPoint";
+            this.comboBoxCutPoint.Size = new System.Drawing.Size(266, 25);
+            this.comboBoxCutPoint.TabIndex = 8;
+            // 
+            // checkBoxCalculateBouts
+            // 
+            this.checkBoxCalculateBouts.AutoSize = true;
+            this.checkBoxCalculateBouts.Checked = true;
+            this.checkBoxCalculateBouts.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxCalculateBouts.Location = new System.Drawing.Point(477, 30);
+            this.checkBoxCalculateBouts.Name = "checkBoxCalculateBouts";
+            this.checkBoxCalculateBouts.Size = new System.Drawing.Size(115, 21);
+            this.checkBoxCalculateBouts.TabIndex = 10;
+            this.checkBoxCalculateBouts.Text = "Calculate Bouts";
+            this.checkBoxCalculateBouts.UseVisualStyleBackColor = true;
+            // 
+            // buttonAddFiles
+            // 
+            this.buttonAddFiles.AutoSize = true;
+            this.buttonAddFiles.ContextMenuStrip = this.contextMenuStripAddDataScoring;
+            this.buttonAddFiles.Dock = System.Windows.Forms.DockStyle.Left;
+            this.buttonAddFiles.Location = new System.Drawing.Point(3, 3);
+            this.buttonAddFiles.Name = "buttonAddFiles";
+            this.buttonAddFiles.Size = new System.Drawing.Size(136, 27);
+            this.buttonAddFiles.SplitMenuStrip = this.contextMenuStripAddDataScoring;
+            this.buttonAddFiles.TabIndex = 4;
+            this.buttonAddFiles.Text = "Add AGD File(s)...";
+            this.buttonAddFiles.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.buttonAddFiles.UseVisualStyleBackColor = true;
+            // 
             // WorkFlowForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1301, 766);
             this.Controls.Add(this.buttonCalculate);
-            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBoxExports);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.groupBoxDataScoring);
+            this.Controls.Add(this.groupBoxWtv);
+            this.Controls.Add(this.groupBoxOpenFilesFilters);
             this.Controls.Add(this.menuStrip1);
             this.MinimumSize = new System.Drawing.Size(981, 659);
             this.Name = "WorkFlowForm";
@@ -472,19 +522,21 @@
             this.Text = "This Does Everything!";
             this.contextMenuStripAddDataScoring.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            this.groupBox1.ResumeLayout(false);
+            this.groupBoxOpenFilesFilters.ResumeLayout(false);
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
+            this.groupBoxWtv.ResumeLayout(false);
+            this.groupBoxWtv.PerformLayout();
+            this.groupBoxExports.ResumeLayout(false);
+            this.groupBoxExports.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.groupBoxDataScoring.ResumeLayout(false);
+            this.groupBoxDataScoring.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -508,9 +560,9 @@
         private System.Windows.Forms.TextBox textBoxDirectory;
         private System.Windows.Forms.Button buttonSelectFolder;
         private System.Windows.Forms.CheckedListBox checkedListBoxFilters;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBoxOpenFilesFilters;
+        private System.Windows.Forms.GroupBox groupBoxWtv;
+        private System.Windows.Forms.GroupBox groupBoxExports;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button buttonCalculate;
@@ -528,6 +580,10 @@
         private System.Windows.Forms.CheckedListBox checkedListBoxFiles;
         private System.Windows.Forms.LinkLabel linkLabelSelectAllFiles;
         private System.Windows.Forms.CheckBox checkBoxCalculateWtv;
+        private System.Windows.Forms.GroupBox groupBoxDataScoring;
+        private System.Windows.Forms.CheckBox checkBoxCalculateBouts;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ComboBox comboBoxCutPoint;
 
     }
 }

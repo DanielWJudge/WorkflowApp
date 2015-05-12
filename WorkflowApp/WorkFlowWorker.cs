@@ -34,6 +34,8 @@ namespace WorkflowApp
         public List<string> Files { get; set; }
         public List<ScoringFilter> Filters { get; set; }
         public bool CalculateWearTimeValidation { get; set; }
+        public string CutPointAlgorithm { get; set; }
+        public bool CalculateBouts { get; set; }
 
         public void CreateDefaultFilterExports()
         {

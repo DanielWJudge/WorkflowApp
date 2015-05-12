@@ -28,6 +28,21 @@ namespace WorkflowApp
 
                 comboBoxWtvAlgorithm.Items.Add(WorkFlowWorker.WTVAlgorithm.Troiano);
                 comboBoxWtvAlgorithm.Items.Add(WorkFlowWorker.WTVAlgorithm.Choi);
+                
+                comboBoxCutPoint.Items.Add("FreedsonAdult1998");
+                comboBoxCutPoint.Items.Add("FreedsonAdultVM32011");
+                comboBoxCutPoint.Items.Add("FreedsonChildren2005");
+                comboBoxCutPoint.Items.Add("PuyauChildren2002");
+                comboBoxCutPoint.Items.Add("TreuthChildrenGirls2004");
+                comboBoxCutPoint.Items.Add("MattocksChildren2007");
+                comboBoxCutPoint.Items.Add("EvensonChildren2008");
+                comboBoxCutPoint.Items.Add("PatePreschool2006");
+                comboBoxCutPoint.Items.Add("TrostToddler2011");
+                comboBoxCutPoint.Items.Add("TroianoAdult2008");
+                comboBoxCutPoint.Items.Add("PulsfordChildren2011");
+                comboBoxCutPoint.Items.Add("ButtePreschoolersVM2013");
+                comboBoxCutPoint.Items.Add("ButtePreschoolers2013");
+                comboBoxCutPoint.SelectedItem = "EvensonChildren2008";
 
                 comboBoxWtvAlgorithm.SelectedIndex = 0;
                 comboBoxExportType.SelectedIndex = 0;
@@ -37,6 +52,8 @@ namespace WorkflowApp
                 listBoxFilterExports.SelectedIndex = 0;
 
                 textBoxDirectory.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+                Text = "This Does Everything! v" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             };
 
             buttonAddFiles.Click += (sender, args) => AddFilesMenuClick();
@@ -128,15 +145,13 @@ namespace WorkflowApp
 
             checkBoxCalculateWtv.CheckedChanged +=
                 (sender, args) => _workFlowWorker.CalculateWearTimeValidation = checkBoxCalculateWtv.Checked;
+
+            checkBoxCalculateBouts.CheckedChanged += (sender, args) => _workFlowWorker.CalculateBouts = checkBoxCalculateBouts.Checked;
         }
 
         private void SaveWorkspace()
         {
-            _workFlowWorker.DirectoryToSaveResults = textBoxDirectory.Text;
-            _workFlowWorker.ExportType = (DataScoringExport.ExportType) comboBoxExportType.SelectedItem;
-            _workFlowWorker.CalculateWearTimeValidation = checkBoxCalculateWtv.Checked;
-            _workFlowWorker.WearTimeValidationAlgorithm = (WorkFlowWorker.WTVAlgorithm) comboBoxWtvAlgorithm.SelectedItem;
-            _workFlowWorker.WearTimeValidationMinimumPerDay = numericUpDown1.Value;
+            SaveSettingsToLocalWorkflow();
 
             using (var saveDialog = new SaveFileDialog())
             {
@@ -186,6 +201,8 @@ namespace WorkflowApp
                 {
                     var fileText = File.ReadAllText(filename);
                     newWorkFlowWorker = JsonConvert.DeserializeObject<WorkFlowWorker>(fileText);
+                    if (string.IsNullOrEmpty(newWorkFlowWorker.CutPointAlgorithm))
+                        newWorkFlowWorker.CutPointAlgorithm = "EvensonChildren2008";
                 }
                 catch (Exception ex)
                 {
@@ -236,6 +253,10 @@ namespace WorkflowApp
             listBoxFilterExports.SelectedIndex = 0;
             comboBoxWtvAlgorithm.SelectedIndex = 0;
             comboBoxExportType.SelectedIndex = 0;
+
+            comboBoxCutPoint.SelectedItem = newWorkFlowWorker.CutPointAlgorithm;
+            checkBoxCalculateBouts.Checked = newWorkFlowWorker.CalculateBouts;
+
             _workFlowWorker = newWorkFlowWorker;
 
             labelFilesCount.Text = string.Format("{0} files loaded", _workFlowWorker.Files.Count);
@@ -282,14 +303,22 @@ namespace WorkflowApp
                 if (result == DialogResult.No)
                     return;
             }
-
-            _workFlowWorker.DirectoryToSaveResults = textBoxDirectory.Text;
-            _workFlowWorker.ExportType = (DataScoringExport.ExportType) comboBoxExportType.SelectedItem;
-            _workFlowWorker.WearTimeValidationAlgorithm = (WorkFlowWorker.WTVAlgorithm) comboBoxWtvAlgorithm.SelectedItem;
-            _workFlowWorker.WearTimeValidationMinimumPerDay = numericUpDown1.Value;
+            
+            SaveSettingsToLocalWorkflow();
 
             using (var workflowProgress = new WorkflowProgress(_workFlowWorker))
                 workflowProgress.ShowDialog(this);
+        }
+
+        private void SaveSettingsToLocalWorkflow()
+        {
+            _workFlowWorker.DirectoryToSaveResults = textBoxDirectory.Text;
+            _workFlowWorker.ExportType = (DataScoringExport.ExportType) comboBoxExportType.SelectedItem;
+            _workFlowWorker.CalculateWearTimeValidation = checkBoxCalculateWtv.Checked;
+            _workFlowWorker.CalculateBouts = checkBoxCalculateBouts.Checked;
+            _workFlowWorker.CutPointAlgorithm = comboBoxCutPoint.Text;
+            _workFlowWorker.WearTimeValidationAlgorithm = (WorkFlowWorker.WTVAlgorithm) comboBoxWtvAlgorithm.SelectedItem;
+            _workFlowWorker.WearTimeValidationMinimumPerDay = numericUpDown1.Value;
         }
 
         private void SelectedExportChanged()

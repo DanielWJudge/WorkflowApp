@@ -187,9 +187,9 @@ namespace WorkflowApp
                             CalculateCutPoints = true,
                             CutPointOptions = new CutPointOptions
                             {
-                                Algorithm = "EvensonChildren2008"
+                                Algorithm = _workFlowWorker.CutPointAlgorithm
                             },
-                            CalculateBouts = false,
+                            CalculateBouts = _workFlowWorker.CalculateBouts,
                             CalculateSedentaryAnalysis = false,
                             IncludeExtraStatistics = true,
                             FilterOptions = new FilterOptions
