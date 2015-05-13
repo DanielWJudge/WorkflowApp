@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ActiLifeAPILibrary;
 using ActiLifeAPILibrary.Models.Actions;
@@ -68,171 +67,162 @@ namespace WorkflowApp
                 {
                     List<WtvResult> wtvResults = new List<WtvResult>(_workFlowWorker.Files.Count);
 
-                    FloatingWindowWTVOptions floatingOptions = GetWearTimeValidationOptions();
+                    FloatingWindowWTVOptions floatingOptions = null;
+                    switch (_workFlowWorker.WearTimeValidationAlgorithm)
+                    {
+                        case WorkFlowWorker.WTVAlgorithm.Troiano:
+                            TroianoWTVOptions troiano = TroianoWTVOptions.Default;
+                            troiano.MinimumLength = (int)_workFlowWorker.WearTimeValidationMinimumLength;
+                            troiano.SpikeTolerance = (int) _workFlowWorker.WearTimeValidationSpikeTolerance;
+                            troiano.UseMinimumWearTimePerDay = true;
+                            troiano.MinimumWearTimePerDayLength =
+                                (int) _workFlowWorker.WearTimeValidationMinimumPerDay;
+                            troiano.MinimumWearTimePerDayUnits = FloatingWindowWTVOptions.Units.Minutes;
+                            floatingOptions = troiano;
+                            break;
+                        case WorkFlowWorker.WTVAlgorithm.Choi:
+                            var choi = ChoiWTVOptions.Default;
+                            choi.MinimumLength = (int)_workFlowWorker.WearTimeValidationMinimumLength;
+                            choi.SpikeTolerance = (int)_workFlowWorker.WearTimeValidationSpikeTolerance;
+                            choi.UseMinimumWearTimePerDay = true;
+                            choi.MinimumWearTimePerDayLength =
+                                (int) _workFlowWorker.WearTimeValidationMinimumPerDay;
+                            choi.MinimumWearTimePerDayUnits = FloatingWindowWTVOptions.Units.Minutes;
+                            floatingOptions = choi;
+                            break;
+                    }
 
+                    //calculate WTV
                     foreach (var file in _workFlowWorker.Files)
-                        await CalculateWearTimeValidationForFileFromOptions(file, floatingOptions, api, wtvResults);
+                    {
+                        LogToTextBox("Calculating Wear Time Validation for: " + file);
+                        var wtv = new WearTimeValidation
+                        {
+                            Options =
+                            {
+                                Algorithm = _workFlowWorker.WearTimeValidationAlgorithm.ToString(),
+                                FileInputPath = file,
+                                ChoiOptions =
+                                    _workFlowWorker.WearTimeValidationAlgorithm == WorkFlowWorker.WTVAlgorithm.Choi
+                                        ? (ChoiWTVOptions) floatingOptions
+                                        : null,
+                                TroianoOptions =
+                                    _workFlowWorker.WearTimeValidationAlgorithm == WorkFlowWorker.WTVAlgorithm.Troiano
+                                        ? (TroianoWTVOptions) floatingOptions
+                                        : null
 
-                    ExportWearTimeValidationResults(wtvResults);
+                            }
+                        };
+                        var wtvResponse = await api.WearTimeValidation(wtv);
+
+                        jobject = JsonConvert.DeserializeObject<JObject>(wtvResponse);
+
+
+                        if (jobject.TryGetValue("Payload", StringComparison.CurrentCultureIgnoreCase, out value))
+                        {
+                            WtvResult wtvResult = JsonConvert.DeserializeObject<WtvResult>(value.ToString());
+                            wtvResults.Add(wtvResult);
+                        }
+                    }
+                    
+                    LogToTextBox("Creating Wear Time Validation CSV Export");
+                    var columnNames = wtvResults[0].SummaryStats.Keys;
+                    string wtvExportFilename = _workFlowWorker.DirectoryToSaveResults + "\\WearTimeValidationResults.csv";
+                    using (var writer = new StreamWriter(wtvExportFilename))
+                    using (var csv = new CsvWriter(writer))
+                    {
+                        csv.WriteField("Filename");
+                        csv.WriteField("Subject Name");
+                        csv.WriteField("Serial Number");
+                        foreach (var columnName in columnNames)
+                            csv.WriteField(columnName);
+
+                        csv.NextRecord();
+
+                        foreach (var wtvResult in wtvResults)
+                        {
+                            csv.WriteField(wtvResult.Filename);
+                            csv.WriteField(wtvResult.SubjectName);
+                            csv.WriteField(wtvResult.SerialNumber);
+                            foreach (var columnName in columnNames)
+                                csv.WriteField(wtvResult.SummaryStats[columnName]);
+
+                            csv.NextRecord();
+                        }
+                    }
                 }
 
                 //loop through filter exports
                 foreach (var filterExport in _workFlowWorker.FilterExports)
-                    await CalculateAndExportDataScoringForFilter(filterExport, api);
+                {
+                    if (filterExport.Files.Count == 0)
+                    {
+                        LogToTextBox("NOT Calculating " + filterExport.Name + " because there aren't any files selected for it.");
+                        continue;
+                    }
 
+                    string directory = _workFlowWorker.DirectoryToSaveResults + "\\" + filterExport.Name;
+                    if (!Directory.Exists(directory))
+                        Directory.CreateDirectory(directory);
+
+                    LogToTextBox("Calculating " + filterExport.Files.Count +  " files and exporting: " + filterExport.Name + " to directory: " + directory);
+                    //calculate data scoring and export
+
+                    var dataScoringExport = new DataScoringExport
+                    {
+                        Options =
+                        {
+                            FileInputPaths = filterExport.Files.ToArray(),
+                            ExportLocation = directory,
+                            ExportFileType = _workFlowWorker.ExportType,
+                            CalculateEnergyExpenditure = false,
+                            CalculateMETs = false,
+                            BatchExportSheetOptions = new BatchExportSheetOptions
+                            {
+                                AddDefinitionComments = false,
+                                AddDefinitionWorksheet = false,
+                                AddWtv = true,
+                                ShowNonWear = false,
+                                ShowSummary = true,
+                                ShowDaily = false,
+                                ShowHourly = false,
+                                AddSleepScores = false,
+                                ShowBoutDetails = false,
+                                ShowSedentaryDetails = false,
+                            },
+                            CalculateCutPoints = true,
+                            CutPointOptions = new CutPointOptions
+                            {
+                                Algorithm = _workFlowWorker.CutPointAlgorithm
+                            },
+                            CalculateBouts = _workFlowWorker.CalculateBouts,
+                            CalculateSedentaryAnalysis = false,
+                            IncludeExtraStatistics = true,
+                            FilterOptions = new FilterOptions
+                            {
+                                UseLogDiaries = false,
+                                UseWTVData = true,
+                                GlobalDateTimeFilterOptions = new GlobalDateTimeFilterOptions
+                                {
+                                    UseGlobalDateTimeFilters = true,
+                                    GlobalDateTimeFilters = filterExport.ScoringFilters.Where(x => x.Use).ToList()
+                                }
+                            }
+
+                        }
+                    };
+
+                    await api.DataScoringExport(dataScoringExport);
+                }
+                
                 //FINISH!
                 LogToTextBox("Finished!");
-            }
-        }
 
-        private FloatingWindowWTVOptions GetWearTimeValidationOptions()
-        {
-            FloatingWindowWTVOptions floatingOptions = null;
-            switch (_workFlowWorker.WearTimeValidationAlgorithm)
-            {
-                case WorkFlowWorker.WTVAlgorithm.Troiano:
-                    TroianoWTVOptions troiano = TroianoWTVOptions.Default;
-                    troiano.MinimumLength = (int) _workFlowWorker.WearTimeValidationMinimumLength;
-                    troiano.SpikeTolerance = (int) _workFlowWorker.WearTimeValidationSpikeTolerance;
-                    troiano.UseMinimumWearTimePerDay = true;
-                    troiano.MinimumWearTimePerDayLength =
-                        (int) _workFlowWorker.WearTimeValidationMinimumPerDay;
-                    troiano.MinimumWearTimePerDayUnits = FloatingWindowWTVOptions.Units.Minutes;
-                    floatingOptions = troiano;
-                    break;
-                case WorkFlowWorker.WTVAlgorithm.Choi:
-                    var choi = ChoiWTVOptions.Default;
-                    choi.MinimumLength = (int) _workFlowWorker.WearTimeValidationMinimumLength;
-                    choi.SpikeTolerance = (int) _workFlowWorker.WearTimeValidationSpikeTolerance;
-                    choi.UseMinimumWearTimePerDay = true;
-                    choi.MinimumWearTimePerDayLength =
-                        (int) _workFlowWorker.WearTimeValidationMinimumPerDay;
-                    choi.MinimumWearTimePerDayUnits = FloatingWindowWTVOptions.Units.Minutes;
-                    floatingOptions = choi;
-                    break;
-            }
-            return floatingOptions;
-        }
+                var foo = JsonConvert.SerializeObject(_workFlowWorker, Formatting.Indented);
 
-        private async Task CalculateAndExportDataScoringForFilter(FilterExport filterExport, ActiLifeAPIConnection api)
-        {
-            if (filterExport.Files.Count == 0)
-            {
-                LogToTextBox("NOT Calculating " + filterExport.Name + " because there aren't any files selected for it.");
-                return;
-            }
+                var bar = JsonConvert.DeserializeObject<WorkFlowWorker>(foo);
 
-            string directory = _workFlowWorker.DirectoryToSaveResults + "\\" + filterExport.Name;
-            if (!Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
-
-            LogToTextBox("Calculating " + filterExport.Files.Count + " files and exporting: " + filterExport.Name +
-                         " to directory: " + directory);
-            //calculate data scoring and export
-
-            var dataScoringExport = new DataScoringExport
-            {
-                Options =
-                {
-                    FileInputPaths = filterExport.Files.ToArray(),
-                    ExportLocation = directory,
-                    ExportFileType = _workFlowWorker.ExportType,
-                    CalculateEnergyExpenditure = false,
-                    CalculateMETs = false,
-                    BatchExportSheetOptions = new BatchExportSheetOptions
-                    {
-                        AddDefinitionComments = false,
-                        AddDefinitionWorksheet = false,
-                        AddWtv = true,
-                        ShowNonWear = false,
-                        ShowSummary = true,
-                        ShowDaily = false,
-                        ShowHourly = false,
-                        AddSleepScores = false,
-                        ShowBoutDetails = false,
-                        ShowSedentaryDetails = false,
-                    },
-                    CalculateCutPoints = true,
-                    CutPointOptions = new CutPointOptions
-                    {
-                        Algorithm = _workFlowWorker.CutPointAlgorithm
-                    },
-                    CalculateBouts = _workFlowWorker.CalculateBouts,
-                    CalculateSedentaryAnalysis = false,
-                    IncludeExtraStatistics = true,
-                    FilterOptions = new FilterOptions
-                    {
-                        UseLogDiaries = false,
-                        UseWTVData = true,
-                        GlobalDateTimeFilterOptions = new GlobalDateTimeFilterOptions
-                        {
-                            UseGlobalDateTimeFilters = true,
-                            GlobalDateTimeFilters = filterExport.ScoringFilters.Where(x => x.Use).ToList()
-                        }
-                    }
-                }
-            };
-
-            await api.DataScoringExport(dataScoringExport);
-        }
-
-        private void ExportWearTimeValidationResults(List<WtvResult> wtvResults)
-        {
-            LogToTextBox("Creating Wear Time Validation CSV Export");
-            var columnNames = wtvResults[0].SummaryStats.Keys;
-            string wtvExportFilename = _workFlowWorker.DirectoryToSaveResults + "\\WearTimeValidationResults.csv";
-            using (var writer = new StreamWriter(wtvExportFilename))
-            using (var csv = new CsvWriter(writer))
-            {
-                csv.WriteField("Filename");
-                csv.WriteField("Subject Name");
-                csv.WriteField("Serial Number");
-                foreach (var columnName in columnNames)
-                    csv.WriteField(columnName);
-
-                csv.NextRecord();
-
-                foreach (var wtvResult in wtvResults)
-                {
-                    csv.WriteField(wtvResult.Filename);
-                    csv.WriteField(wtvResult.SubjectName);
-                    csv.WriteField(wtvResult.SerialNumber);
-                    foreach (var columnName in columnNames)
-                        csv.WriteField(wtvResult.SummaryStats[columnName]);
-
-                    csv.NextRecord();
-                }
-            }
-        }
-
-        private async Task CalculateWearTimeValidationForFileFromOptions(string file, FloatingWindowWTVOptions floatingOptions,
-            ActiLifeAPIConnection api, List<WtvResult> wtvResults)
-        {
-            LogToTextBox("Calculating Wear Time Validation for: " + file);
-            var wtv = new WearTimeValidation
-            {
-                Options =
-                {
-                    Algorithm = _workFlowWorker.WearTimeValidationAlgorithm.ToString(),
-                    FileInputPath = file,
-                    ChoiOptions =
-                        _workFlowWorker.WearTimeValidationAlgorithm == WorkFlowWorker.WTVAlgorithm.Choi
-                            ? (ChoiWTVOptions) floatingOptions
-                            : null,
-                    TroianoOptions =
-                        _workFlowWorker.WearTimeValidationAlgorithm == WorkFlowWorker.WTVAlgorithm.Troiano
-                            ? (TroianoWTVOptions) floatingOptions
-                            : null
-                }
-            };
-            var wtvResponse = await api.WearTimeValidation(wtv);
-
-            JObject jobject = JsonConvert.DeserializeObject<JObject>(wtvResponse);
-            JToken value;
-            if (jobject.TryGetValue("Payload", StringComparison.CurrentCultureIgnoreCase, out value))
-            {
-                WtvResult wtvResult = JsonConvert.DeserializeObject<WtvResult>(value.ToString());
-                wtvResults.Add(wtvResult);
+                Console.WriteLine(bar);
             }
         }
 
