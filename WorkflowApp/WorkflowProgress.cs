@@ -217,12 +217,6 @@ namespace WorkflowApp
                 
                 //FINISH!
                 LogToTextBox("Finished!");
-
-                var foo = JsonConvert.SerializeObject(_workFlowWorker, Formatting.Indented);
-
-                var bar = JsonConvert.DeserializeObject<WorkFlowWorker>(foo);
-
-                Console.WriteLine(bar);
             }
         }
 
