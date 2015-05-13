@@ -36,6 +36,8 @@ namespace WorkflowApp
         public bool CalculateWearTimeValidation { get; set; }
         public string CutPointAlgorithm { get; set; }
         public bool CalculateBouts { get; set; }
+        public decimal WearTimeValidationMinimumLength { get; set; }
+        public decimal WearTimeValidationSpikeTolerance { get; set; }
 
         public void CreateDefaultFilterExports()
         {

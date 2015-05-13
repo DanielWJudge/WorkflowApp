@@ -33,7 +33,7 @@
             this.toolStripMenuAddFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuAddDirectory = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonClear = new System.Windows.Forms.Button();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownWearMinutes = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.comboBoxWtvAlgorithm = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -65,12 +65,16 @@
             this.openWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxDataScoring = new System.Windows.Forms.GroupBox();
+            this.checkBoxCalculateBouts = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.comboBoxCutPoint = new System.Windows.Forms.ComboBox();
-            this.checkBoxCalculateBouts = new System.Windows.Forms.CheckBox();
+            this.numericUpDownMinimumLength = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.numericUpDownSpikeTolerance = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
             this.buttonAddFiles = new WorkflowApp.SplitButton();
             this.contextMenuStripAddDataScoring.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWearMinutes)).BeginInit();
             this.groupBoxOpenFilesFilters.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -79,6 +83,8 @@
             this.groupBox4.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBoxDataScoring.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinimumLength)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSpikeTolerance)).BeginInit();
             this.SuspendLayout();
             // 
             // contextMenuStripAddDataScoring
@@ -112,18 +118,18 @@
             this.buttonClear.Text = "Clear Files";
             this.buttonClear.UseVisualStyleBackColor = true;
             // 
-            // numericUpDown1
+            // numericUpDownWearMinutes
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(843, 29);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
+            this.numericUpDownWearMinutes.Location = new System.Drawing.Point(646, 29);
+            this.numericUpDownWearMinutes.Maximum = new decimal(new int[] {
             1500,
             0,
             0,
             0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(77, 25);
-            this.numericUpDown1.TabIndex = 8;
-            this.numericUpDown1.Value = new decimal(new int[] {
+            this.numericUpDownWearMinutes.Name = "numericUpDownWearMinutes";
+            this.numericUpDownWearMinutes.Size = new System.Drawing.Size(77, 25);
+            this.numericUpDownWearMinutes.TabIndex = 8;
+            this.numericUpDownWearMinutes.Value = new decimal(new int[] {
             480,
             0,
             0,
@@ -132,7 +138,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(638, 33);
+            this.label5.Location = new System.Drawing.Point(441, 33);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(199, 17);
             this.label5.TabIndex = 7;
@@ -142,7 +148,7 @@
             // 
             this.comboBoxWtvAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxWtvAlgorithm.FormattingEnabled = true;
-            this.comboBoxWtvAlgorithm.Location = new System.Drawing.Point(477, 29);
+            this.comboBoxWtvAlgorithm.Location = new System.Drawing.Point(314, 29);
             this.comboBoxWtvAlgorithm.Name = "comboBoxWtvAlgorithm";
             this.comboBoxWtvAlgorithm.Size = new System.Drawing.Size(121, 25);
             this.comboBoxWtvAlgorithm.TabIndex = 6;
@@ -150,11 +156,11 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(272, 33);
+            this.label4.Location = new System.Drawing.Point(240, 33);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(197, 17);
+            this.label4.Size = new System.Drawing.Size(68, 17);
             this.label4.TabIndex = 5;
-            this.label4.Text = "Wear Time Validation Algorithm:";
+            this.label4.Text = "Algorithm:";
             // 
             // checkedListBoxFilters
             // 
@@ -164,7 +170,7 @@
             this.checkedListBoxFilters.FormattingEnabled = true;
             this.checkedListBoxFilters.Location = new System.Drawing.Point(313, 57);
             this.checkedListBoxFilters.Name = "checkedListBoxFilters";
-            this.checkedListBoxFilters.Size = new System.Drawing.Size(461, 224);
+            this.checkedListBoxFilters.Size = new System.Drawing.Size(461, 244);
             this.checkedListBoxFilters.TabIndex = 10;
             // 
             // buttonClearFilters
@@ -279,8 +285,12 @@
             // 
             // groupBoxWtv
             // 
+            this.groupBoxWtv.Controls.Add(this.numericUpDownSpikeTolerance);
+            this.groupBoxWtv.Controls.Add(this.label9);
+            this.groupBoxWtv.Controls.Add(this.numericUpDownMinimumLength);
+            this.groupBoxWtv.Controls.Add(this.label1);
             this.groupBoxWtv.Controls.Add(this.checkBoxCalculateWtv);
-            this.groupBoxWtv.Controls.Add(this.numericUpDown1);
+            this.groupBoxWtv.Controls.Add(this.numericUpDownWearMinutes);
             this.groupBoxWtv.Controls.Add(this.label4);
             this.groupBoxWtv.Controls.Add(this.label5);
             this.groupBoxWtv.Controls.Add(this.comboBoxWtvAlgorithm);
@@ -288,7 +298,7 @@
             this.groupBoxWtv.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxWtv.Location = new System.Drawing.Point(10, 153);
             this.groupBoxWtv.Name = "groupBoxWtv";
-            this.groupBoxWtv.Size = new System.Drawing.Size(1281, 67);
+            this.groupBoxWtv.Size = new System.Drawing.Size(1281, 63);
             this.groupBoxWtv.TabIndex = 3;
             this.groupBoxWtv.TabStop = false;
             this.groupBoxWtv.Text = "Select Wear Time Validation Options";
@@ -316,9 +326,9 @@
             this.groupBoxExports.Controls.Add(this.checkedListBoxFilters);
             this.groupBoxExports.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxExports.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxExports.Location = new System.Drawing.Point(10, 287);
+            this.groupBoxExports.Location = new System.Drawing.Point(10, 283);
             this.groupBoxExports.Name = "groupBoxExports";
-            this.groupBoxExports.Size = new System.Drawing.Size(1281, 309);
+            this.groupBoxExports.Size = new System.Drawing.Size(1281, 313);
             this.groupBoxExports.TabIndex = 4;
             this.groupBoxExports.TabStop = false;
             this.groupBoxExports.Text = "Select Filters for Each Export";
@@ -336,7 +346,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(950, 34);
+            this.label7.Location = new System.Drawing.Point(924, 34);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(169, 17);
             this.label7.TabIndex = 14;
@@ -360,7 +370,7 @@
             this.checkedListBoxFiles.FormattingEnabled = true;
             this.checkedListBoxFiles.Location = new System.Drawing.Point(794, 57);
             this.checkedListBoxFiles.Name = "checkedListBoxFiles";
-            this.checkedListBoxFiles.Size = new System.Drawing.Size(481, 224);
+            this.checkedListBoxFiles.Size = new System.Drawing.Size(481, 244);
             this.checkedListBoxFiles.TabIndex = 12;
             // 
             // label2
@@ -380,7 +390,7 @@
             this.listBoxFilterExports.ItemHeight = 17;
             this.listBoxFilterExports.Location = new System.Drawing.Point(26, 57);
             this.listBoxFilterExports.Name = "listBoxFilterExports";
-            this.listBoxFilterExports.Size = new System.Drawing.Size(255, 225);
+            this.listBoxFilterExports.Size = new System.Drawing.Size(255, 242);
             this.listBoxFilterExports.TabIndex = 11;
             // 
             // groupBox4
@@ -451,12 +461,24 @@
             this.groupBoxDataScoring.Controls.Add(this.comboBoxCutPoint);
             this.groupBoxDataScoring.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxDataScoring.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxDataScoring.Location = new System.Drawing.Point(10, 220);
+            this.groupBoxDataScoring.Location = new System.Drawing.Point(10, 216);
             this.groupBoxDataScoring.Name = "groupBoxDataScoring";
             this.groupBoxDataScoring.Size = new System.Drawing.Size(1281, 67);
             this.groupBoxDataScoring.TabIndex = 9;
             this.groupBoxDataScoring.TabStop = false;
             this.groupBoxDataScoring.Text = "Data Scoring Calculation Extras";
+            // 
+            // checkBoxCalculateBouts
+            // 
+            this.checkBoxCalculateBouts.AutoSize = true;
+            this.checkBoxCalculateBouts.Checked = true;
+            this.checkBoxCalculateBouts.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxCalculateBouts.Location = new System.Drawing.Point(477, 30);
+            this.checkBoxCalculateBouts.Name = "checkBoxCalculateBouts";
+            this.checkBoxCalculateBouts.Size = new System.Drawing.Size(115, 21);
+            this.checkBoxCalculateBouts.TabIndex = 10;
+            this.checkBoxCalculateBouts.Text = "Calculate Bouts";
+            this.checkBoxCalculateBouts.UseVisualStyleBackColor = true;
             // 
             // label8
             // 
@@ -476,17 +498,57 @@
             this.comboBoxCutPoint.Size = new System.Drawing.Size(266, 25);
             this.comboBoxCutPoint.TabIndex = 8;
             // 
-            // checkBoxCalculateBouts
+            // numericUpDownMinimumLength
             // 
-            this.checkBoxCalculateBouts.AutoSize = true;
-            this.checkBoxCalculateBouts.Checked = true;
-            this.checkBoxCalculateBouts.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxCalculateBouts.Location = new System.Drawing.Point(477, 30);
-            this.checkBoxCalculateBouts.Name = "checkBoxCalculateBouts";
-            this.checkBoxCalculateBouts.Size = new System.Drawing.Size(115, 21);
-            this.checkBoxCalculateBouts.TabIndex = 10;
-            this.checkBoxCalculateBouts.Text = "Calculate Bouts";
-            this.checkBoxCalculateBouts.UseVisualStyleBackColor = true;
+            this.numericUpDownMinimumLength.Location = new System.Drawing.Point(843, 29);
+            this.numericUpDownMinimumLength.Maximum = new decimal(new int[] {
+            1500,
+            0,
+            0,
+            0});
+            this.numericUpDownMinimumLength.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownMinimumLength.Name = "numericUpDownMinimumLength";
+            this.numericUpDownMinimumLength.Size = new System.Drawing.Size(77, 25);
+            this.numericUpDownMinimumLength.TabIndex = 11;
+            this.numericUpDownMinimumLength.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(729, 33);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(108, 17);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "Minimum Length:";
+            // 
+            // numericUpDownSpikeTolerance
+            // 
+            this.numericUpDownSpikeTolerance.Location = new System.Drawing.Point(1099, 29);
+            this.numericUpDownSpikeTolerance.Maximum = new decimal(new int[] {
+            1500,
+            0,
+            0,
+            0});
+            this.numericUpDownSpikeTolerance.Name = "numericUpDownSpikeTolerance";
+            this.numericUpDownSpikeTolerance.Size = new System.Drawing.Size(77, 25);
+            this.numericUpDownSpikeTolerance.TabIndex = 13;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(933, 33);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(160, 17);
+            this.label9.TabIndex = 12;
+            this.label9.Text = "Spike Tolerance (minutes):";
             // 
             // buttonAddFiles
             // 
@@ -515,13 +577,13 @@
             this.Controls.Add(this.groupBoxWtv);
             this.Controls.Add(this.groupBoxOpenFilesFilters);
             this.Controls.Add(this.menuStrip1);
-            this.MinimumSize = new System.Drawing.Size(981, 659);
+            this.MinimumSize = new System.Drawing.Size(1226, 678);
             this.Name = "WorkFlowForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "This Does Everything!";
             this.contextMenuStripAddDataScoring.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWearMinutes)).EndInit();
             this.groupBoxOpenFilesFilters.ResumeLayout(false);
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
@@ -537,6 +599,8 @@
             this.menuStrip1.PerformLayout();
             this.groupBoxDataScoring.ResumeLayout(false);
             this.groupBoxDataScoring.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinimumLength)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSpikeTolerance)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -549,7 +613,7 @@
         public System.Windows.Forms.ToolStripMenuItem toolStripMenuAddDirectory;
         private SplitButton buttonAddFiles;
         private System.Windows.Forms.Button buttonClear;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown numericUpDownWearMinutes;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox comboBoxWtvAlgorithm;
         private System.Windows.Forms.Label label4;
@@ -584,6 +648,10 @@
         private System.Windows.Forms.CheckBox checkBoxCalculateBouts;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ComboBox comboBoxCutPoint;
+        private System.Windows.Forms.NumericUpDown numericUpDownMinimumLength;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown numericUpDownSpikeTolerance;
+        private System.Windows.Forms.Label label9;
 
     }
 }

@@ -71,18 +71,24 @@ namespace WorkflowApp
                     switch (_workFlowWorker.WearTimeValidationAlgorithm)
                     {
                         case WorkFlowWorker.WTVAlgorithm.Troiano:
-                            floatingOptions = TroianoWTVOptions.Default;
-                            floatingOptions.UseMinimumWearTimePerDay = true;
-                            floatingOptions.MinimumWearTimePerDayLength =
+                            TroianoWTVOptions troiano = TroianoWTVOptions.Default;
+                            troiano.MinimumLength = (int)_workFlowWorker.WearTimeValidationMinimumLength;
+                            troiano.SpikeTolerance = (int) _workFlowWorker.WearTimeValidationSpikeTolerance;
+                            troiano.UseMinimumWearTimePerDay = true;
+                            troiano.MinimumWearTimePerDayLength =
                                 (int) _workFlowWorker.WearTimeValidationMinimumPerDay;
-                            floatingOptions.MinimumWearTimePerDayUnits = FloatingWindowWTVOptions.Units.Minutes;
+                            troiano.MinimumWearTimePerDayUnits = FloatingWindowWTVOptions.Units.Minutes;
+                            floatingOptions = troiano;
                             break;
                         case WorkFlowWorker.WTVAlgorithm.Choi:
-                            floatingOptions = ChoiWTVOptions.Default;
-                            floatingOptions.UseMinimumWearTimePerDay = true;
-                            floatingOptions.MinimumWearTimePerDayLength =
+                            var choi = ChoiWTVOptions.Default;
+                            choi.MinimumLength = (int)_workFlowWorker.WearTimeValidationMinimumLength;
+                            choi.SpikeTolerance = (int)_workFlowWorker.WearTimeValidationSpikeTolerance;
+                            choi.UseMinimumWearTimePerDay = true;
+                            choi.MinimumWearTimePerDayLength =
                                 (int) _workFlowWorker.WearTimeValidationMinimumPerDay;
-                            floatingOptions.MinimumWearTimePerDayUnits = FloatingWindowWTVOptions.Units.Minutes;
+                            choi.MinimumWearTimePerDayUnits = FloatingWindowWTVOptions.Units.Minutes;
+                            floatingOptions = choi;
                             break;
                     }
 

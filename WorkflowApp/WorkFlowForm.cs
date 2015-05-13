@@ -201,6 +201,8 @@ namespace WorkflowApp
                 {
                     var fileText = File.ReadAllText(filename);
                     newWorkFlowWorker = JsonConvert.DeserializeObject<WorkFlowWorker>(fileText);
+                    if (newWorkFlowWorker.WearTimeValidationMinimumLength == 0)
+                        newWorkFlowWorker.WearTimeValidationMinimumLength = 30;
                     if (string.IsNullOrEmpty(newWorkFlowWorker.CutPointAlgorithm))
                         newWorkFlowWorker.CutPointAlgorithm = "EvensonChildren2008";
                 }
@@ -248,7 +250,7 @@ namespace WorkflowApp
 
             checkBoxCalculateWtv.Checked = newWorkFlowWorker.CalculateWearTimeValidation;
             comboBoxWtvAlgorithm.SelectedItem = newWorkFlowWorker.WearTimeValidationAlgorithm;
-            numericUpDown1.Value = newWorkFlowWorker.WearTimeValidationMinimumPerDay;
+            numericUpDownWearMinutes.Value = newWorkFlowWorker.WearTimeValidationMinimumPerDay;
 
             listBoxFilterExports.SelectedIndex = 0;
             comboBoxWtvAlgorithm.SelectedIndex = 0;
@@ -256,6 +258,9 @@ namespace WorkflowApp
 
             comboBoxCutPoint.SelectedItem = newWorkFlowWorker.CutPointAlgorithm;
             checkBoxCalculateBouts.Checked = newWorkFlowWorker.CalculateBouts;
+
+            numericUpDownMinimumLength.Value = newWorkFlowWorker.WearTimeValidationMinimumLength;
+            numericUpDownSpikeTolerance.Value = newWorkFlowWorker.WearTimeValidationSpikeTolerance;
 
             _workFlowWorker = newWorkFlowWorker;
 
@@ -318,7 +323,9 @@ namespace WorkflowApp
             _workFlowWorker.CalculateBouts = checkBoxCalculateBouts.Checked;
             _workFlowWorker.CutPointAlgorithm = comboBoxCutPoint.Text;
             _workFlowWorker.WearTimeValidationAlgorithm = (WorkFlowWorker.WTVAlgorithm) comboBoxWtvAlgorithm.SelectedItem;
-            _workFlowWorker.WearTimeValidationMinimumPerDay = numericUpDown1.Value;
+            _workFlowWorker.WearTimeValidationMinimumLength = numericUpDownMinimumLength.Value;
+            _workFlowWorker.WearTimeValidationSpikeTolerance = numericUpDownSpikeTolerance.Value;
+            _workFlowWorker.WearTimeValidationMinimumPerDay = numericUpDownWearMinutes.Value;
         }
 
         private void SelectedExportChanged()
